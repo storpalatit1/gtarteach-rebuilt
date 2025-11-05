@@ -20,6 +20,10 @@ const props = defineProps({
   selectedAnswer:{
     type : Object,
     required:false
+  },
+  modifiers:{
+    type: String,
+    required:false
   }
 })
 var answered = ref(null);
@@ -33,27 +37,26 @@ function setFlag()
 {
   nextQuestionFlag=true;
 }
-}
-function getRandomQuestion() {
+}function getRandomQuestion() {
   if (answered.value && nextQuestionFlag) {
-
     answered.value = null
     isCorrect = null
     nextQuestionFlag = false
-    emit('question-rerolled');
+    emit('question-rerolled')
   }
 
   let questions = []
 
   // Handle single test
   if (typeof props.test === 'string') {
-    questions = data.questions[props.type][props.test]
+    const set = data.questions?.[props.type]?.[props.test]
+    if (Array.isArray(set)) questions = set
   }
 
   // Handle multiple tests
   else if (Array.isArray(props.test)) {
     for (const testName of props.test) {
-      const set = data.questions[props.type][testName]
+      const set = data.questions?.[props.type]?.[testName]
       if (Array.isArray(set)) questions.push(...set)
     }
   }
@@ -68,11 +71,26 @@ function getRandomQuestion() {
   console.log('Selected:', currentQuestion.value)
   nextQuestionFlag = false
 }
-
+console.log(props.modifiers);
 function checkAnswerNote(){
   answered.value = true;
     console.log(props.selectedAnswer, currentQuestion.value);
-    if(props.selectedAnswer.name==currentQuestion.value.answer && props.selectedAnswer.string == currentQuestion.value.gString)
+    console.log(props.selectedAnswer.name, props.selectedAnswer.string, currentQuestion.value.answer, currentQuestion.value.gString);
+    if(props.modifiers==='free')
+    {
+       console.log("Modifier");
+      if(props.selectedAnswer.name==currentQuestion.value.answer)
+    {
+      console.log("Correct");
+      isCorrect = true;
+    }
+    else
+    {
+      console.log("Incorrect");
+      isCorrect = false;
+    }
+    }
+    else if(props.selectedAnswer.name==currentQuestion.value.answer && props.selectedAnswer.string == currentQuestion.value.gString)
     {
       console.log("Correct");
       isCorrect = true;
@@ -177,7 +195,7 @@ onMounted(() => {
  <div v-else-if="props.type === 'notes'">
   <div v-if="currentQuestion">
     <div py-2/>
-    <p v-if="currentQuestion.answer == 'E' || currentQuestion.answer == 'E2'">
+    <p v-if="currentQuestion.answer == 'E' || currentQuestion.answer == 'E2' && currentQuestion.gString==='1' || currentQuestion.gString==='6'">
         Find {{ currentQuestion.answer }} on the {{ currentQuestion.gString }} string
     </p>
     <p v-else>

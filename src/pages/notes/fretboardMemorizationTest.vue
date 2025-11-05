@@ -36,5 +36,5 @@ function selectAnswer(note)
         <div v-else>
         <Fretboard @note-pressed="selectAnswer" :modifiers="'blindfold'"></Fretboard>
         </div>
-        <TestWindow :type="'notes'" :test="'test1', 'test2','test3','test4','test5'" :selectedAnswer="selectedAnswer" @answer-submited="hideFretboard" @question-rerolled="reappearFretboard"></TestWindow>
+        <TestWindow :type="'notes'" :test="['test1', 'test2','test3','test4','test5']" :selectedAnswer="selectedAnswer" :modifiers="'free'" @answer-submited="hideFretboard" @question-rerolled="reappearFretboard"></TestWindow>
 </template>

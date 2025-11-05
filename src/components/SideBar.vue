@@ -13,7 +13,7 @@ const noteRoutes = [
   '/notes',
   '/notes/fretboard',
   '/notes/openStringTest',
-  '/notes/fiveFretsTest'
+  '/notes/fretboardMemorizationTest'
 ]
 </script>
 
@@ -35,7 +35,7 @@ const noteRoutes = [
       <ul>
         <RouterLink icon-btn to="/notes/fretboard">Interactive fretboard</RouterLink><div py-1/>
          <RouterLink icon-btn to="/notes/openStringTest">Open String Test</RouterLink> <div py-1/>
-         <RouterLink icon-btn to="/notes/fiveFretsTest">0-4 Fret test</RouterLink>
+         <RouterLink icon-btn to="/notes/fretboardMemorizationTest">Fretboard memorization test</RouterLink>
       </ul>
     </div>
   </section>

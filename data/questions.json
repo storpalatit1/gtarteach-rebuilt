@@ -118,7 +118,7 @@
                 "audio": "../../../public/notes/1/E.mp3",
                 "answer": "E",
                 "answerOctave": "3",
-                "gString":"1"
+                "gString":"6"
             },
             {
                 "id": 2,
@@ -158,7 +158,7 @@
                 "audio": "../../../public/notes/6/E.mp3",
                 "answer": "E",
                 "answerOctave": "3",
-                "gString":"6"
+                "gString":"1"
             }
         ],
         "test2":[
