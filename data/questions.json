@@ -1,0 +1,373 @@
+{
+  "questions": {
+    "graphic": {
+        "test1":[
+            {
+                "id": 1,
+                "question": "Which chord is shown here?",
+                "image": "../../../public/Chords/graphic/AChord.png",
+                "options": ["A Major", "C Major", "D Major", "E Major"],
+                "answer": "A Major"
+            },
+            {
+                "id": 2,
+                "question": "Which chord is shown here?",
+                "image": "../../../public/Chords/graphic/DChord.png",
+                "options": ["A Major", "D Major", "E Major", "G Major"],
+                "answer": "D Major"
+            }
+            ,
+            {
+                "id": 3,
+                "question": "Which chord is shown here?",
+                "image": "../../../public/Chords/graphic/CChord.png",
+                "options": ["C Major", "D Major", "E Minor", "G Major"],
+                "answer": "C Major"
+            },
+            {
+                "id": 4,
+                "question": "Which chord is shown here?",
+                "image": "../../../public/Chords/graphic/GChord.png",
+                "options": ["A Major", "A Minor", "E Minor", "G Major"],
+                "answer": "G Major"
+            }
+            ,
+            {
+                "id": 5,
+                "question": "Which chord is shown here?",
+                "image": "../../../public/Chords/graphic/EmChord.png",
+                "options": ["A Major", "D Minor", "E Major", "C Major"],
+                "answer": "E Major"
+            },
+            {
+                "id": 6,
+                "question": "Which chord is shown here?",
+
+                "image": "../../../public/chords/graphic/EChord.png",
+                "options": ["A Minor", "D Major", "E Minor", "G Major"],
+                "answer": "E Minor"
+            }
+            ,
+            {
+                "id": 7,
+                "question": "Which chord is shown here?",
+                "image": "../../../public/chords/graphic/AmChord.png",
+                "options": ["A Minor", "G Major", "E Major", "C Major"],
+                "answer": "A Minor"
+            }
+        ]
+    },
+    "audio": {
+        "test2":[
+            {
+                "id": 1,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/AChord.mp3",
+                "options": ["A Major", "B Minor", "C Major", "E Major"],
+                "answer": "A Major"
+            },
+            {
+                "id": 2,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/AmChord.mp3",
+                "options": ["A Minor", "C Major", "D Minor", "G Major"],
+                "answer": "A Minor"
+            },
+            {
+                "id": 3,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/DChord.mp3",
+                "options": ["A Major", "D Major", "F Major", "G Major"],
+                "answer": "D Major"
+            },
+                        {
+                "id": 4,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/EChord.mp3",
+                "options": ["A Minor", "C Minor", "E Major", "E Minor"],
+                "answer": "E Major"
+            },
+            
+                        {
+                "id": 5,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/EmChord.mp3",
+                "options": ["D Minor", "C Minor", "G Major", "E Minor"],
+                "answer": "E Minor"
+            },  {
+                "id": 6,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/GChord.mp3",
+                "options": ["D Minor", "A Major", "G Major", "C Minor"],
+                "answer": "G Major"
+            },  {
+                "id": 7,
+                "question": "Identify this chord by sound.",
+                "audio": "../../../public/chords/CChord.mp3",
+                "options": ["G Major", "C Major", "A Major", "E Minor"],
+                "answer": "C Major"
+            }
+            
+    ]
+    },
+     "notes":{
+        "test1":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/1/E.mp3",
+                "answer": "E",
+                "answerOctave": "3",
+                "gString":"1"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/2/A.mp3",
+                "answer": "A",
+                "answerOctave": "1",
+                "gString":"2"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/3/D.mp3",
+                "answer": "D",
+                "answerOctave": "2",
+                "gString":"3"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/4/G.mp3",
+                "answer": "G",
+                "answerOctave": "2",
+                "gString":"4"
+            },
+            {
+                "id": 5,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/5/B.mp3",
+                "answer": "B",
+                "answerOctave": "2",
+                "gString":"5"
+            },
+            {
+                "id": 6,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/6/E.mp3",
+                "answer": "E",
+                "answerOctave": "3",
+                "gString":"6"
+            }
+        ],
+        "test2":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/1/F.mp3",
+                "answer": "F",
+                "answerOctave": "1",
+                "gString":"6"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/1/Fs.mp3",
+                "answer": "F#",
+                "answerOctave": "1",
+                "gString":"6"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/1/G.mp3",
+                "answer": "G",
+                "answerOctave": "1",
+                "gString":"6"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/1/Gs.mp3",
+                "answer": "G#",
+                "answerOctave": "1",
+                "gString":"6"
+            }
+        ],
+        "test3":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/2/As.mp3",
+                "answer": "A#",
+                "answerOctave": "1",
+                "gString":"5"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/2/B.mp3",
+                "answer": "B",
+                "answerOctave": "1",
+                "gString":"5"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/2/C.mp3",
+                "answer": "C",
+                "answerOctave": "2",
+                "gString":"5"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/2/Cs.mp3",
+                "answer": "C#",
+                "answerOctave": "2",
+                "gString":"5"
+            }
+        ],
+        "test4":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/3/Ds.mp3",
+                "answer": "D#",
+                "answerOctave": "2",
+                "gString":"4"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/3/E.mp3",
+                "answer": "E",
+                "answerOctave": "2",
+                "gString":"4"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/3/F.mp3",
+                "answer": "F",
+                "answerOctave": "2",
+                "gString":"4"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/3/Fs.mp3",
+                "answer": "F#",
+                "answerOctave": "2",
+                "gString":"4"
+            }
+        ],
+        "test5":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/4/Gs.mp3",
+                "answer": "D#",
+                "answerOctave": "2",
+                "gString":"3"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/4/A.mp3",
+                "answer": "E",
+                "answerOctave": "2",
+                "gString":"3"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/4/As.mp3",
+                "answer": "F",
+                "answerOctave": "2",
+                "gString":"3"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/4/B.mp3",
+                "answer": "F#",
+                "answerOctave": "2",
+                "gString":"3"
+            }
+        ],
+        
+        "test6":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/5/C.mp3",
+                "answer": "C",
+                "answerOctave": "3",
+                "gString":"2"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/5/Cs.mp3",
+                "answer": "C#",
+                "answerOctave": "3",
+                "gString":"2"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/5/D.mp3",
+                "answer": "D",
+                "answerOctave": "3",
+                "gString":"2"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/5/Ds.mp3",
+                "answer": "D#",
+                "answerOctave": "3",
+                "gString":"2"
+            }
+        ],
+        
+        "test7":[
+            {
+                "id": 1,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/6/C.mp3",
+                "answer": "F",
+                "answerOctave": "3",
+                "gString":"1"
+            },
+            {
+                "id": 2,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/6/Cs.mp3",
+                "answer": "F#",
+                "answerOctave": "3",
+                "gString":"1"
+            },
+            {
+                "id": 3,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/6/D.mp3",
+                "answer": "G",
+                "answerOctave": "3",
+                "gString":"1"
+            },
+            {
+                "id": 4,
+                "question": "What Note is this?.",
+                "audio": "../../../public/notes/6/Ds.mp3",
+                "answer": "G#",
+                "answerOctave": "3",
+                "gString":"1"
+            }
+        ]
+    }
+  }
+ 
+}
