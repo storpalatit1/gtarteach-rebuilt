@@ -29,7 +29,8 @@ const props = defineProps({
 var answered = ref(null);
 var isCorrect = null;
 var nextQuestionFlag = false;
-// This will hold the randomly selected question
+
+
 const currentQuestion = ref(null);
 function setFlag()
 {
@@ -47,13 +48,12 @@ function setFlag()
 
   let questions = []
 
-  // Handle single test
   if (typeof props.test === 'string') {
     const set = data.questions?.[props.type]?.[props.test]
     if (Array.isArray(set)) questions = set
   }
 
-  // Handle multiple tests
+
   else if (Array.isArray(props.test)) {
     for (const testName of props.test) {
       const set = data.questions?.[props.type]?.[testName]
@@ -119,12 +119,11 @@ function checkAnswer(userAnswer, currentQuestion) {
     }
     getRandomQuestion();
 }
-// ✅ Update question whenever props change
+
 watch(() => [props.type, props.test], () => {
   getRandomQuestion()
 })
 
-// ✅ Or when the component first mounts
 onMounted(() => {
   getRandomQuestion()
 })
@@ -227,190 +226,3 @@ onMounted(() => {
       
   </div>
 </template>
-<!-- <script setup>
-import Correct from '../components/Correct.vue'
-import AudioPlayer from '../components/AudioPlayer.vue'
-import { useRouter } from 'vue-router';
-</script> 
-<template>
-
-        <div id = "TestContainer">
-          <div v-if="isCorrect == null"> 
-                <h1 id = "headliner">{{currentQuestion.question}}</h1>
-                  <div id = "forMedia" v-if="currentQuestion.type=='image'">
-                  <img id = "displayImage" :src="currentQuestion.media"/>
-                  </div>
-                  <div v-else id = "displaySound">
-                     <AudioPlayer :audioPath="currentQuestion.media" />
-                  </div>
-                  <div id = "forQuestions">
-                    <ul>
-                        <li 
-                            v-for="(option, index) in currentQuestion.options" 
-                            :key="index" class = "Choices"
-                            @click="checkAnswer(option)"
-                        >
-                            {{ option }}
-                        </li>
-                        </ul>
-                  </div>
-                  <div style="clear:both"></div>
-          </div>
-            <div v-else>
-                  <div v-if="isCorrect==true">
-                      <div class = "feedback correct">
-                        <h1>CORRECT!</h1>
-                        <h2>{{timer}}</h2>
-                      </div>
-                </div>
-                <div v-else>
-                        <div class = "feedback incorrect">
-                        <h1>INCORRECT!</h1>
-                        <h2>{{timer}}</h2>
-                      </div>
-                </div>
-              </div>
-          
-            
-           
-        </div>
-
-</template>
-
-<script>
-import router from '@/router';
-export default {
-  props: {
-    questionOffSet: {
-      type: Number,
-      required: true
-    },
-    howManyQuestions :{
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      currentQuestion: {},
-      isCorrect: null,
-      timer: 3
-    };
-  },
-  methods:{
-    checkAnswer(option){
-      console.log(option, this.currentQuestion.answer)
-      if(option == this.currentQuestion.answer)
-      {
-        console.log("correct")
-        this.isCorrect = true
-        console.log(this.isCorrect)
-
-      }
-      else{
-      console.log("incorrect")
-      this.isCorrect = false
-      console.log(this.isCorrect)
-      }
-              for (let i = 1; i <= 3; i++) {
-              setTimeout(() => {
-                this.timer--;
-              }, i * 1000); // 3 second delay
-            }
-            setTimeout(() => {
-              const pageAdress = window.location
-        router.go(pageAdress);
-            }, 3000);
-        
-    }
-  },
-  mounted() {
-    fetch("http://localhost:3000/questions")
-      .then(res => res.json())
-      .then(data => {
-        console.log('Fetched JSON:', data);
-        const questions = data;
-        const randomIndex = Math.floor(Math.random() * this.howManyQuestions) + this.questionOffSet; // question range
-        this.currentQuestion = questions[randomIndex];
-        this.currentQuestion.options.sort(() => Math.random() - 0.5);
-        console.log(this.currentQuestion.options);
-        
-      })
-      .catch(err => console.log(err.message));
-      
-  }
-
-  
-};
-</script>
-<style scoped>
-.feedback{
-  width: 100%;
-  height: 100vh;
-  background-color: black;
-}
-
-.correct{
- width: 100%;
-  height: 35vh;
-  background-color: green;
-  border-radius: 5%;
-}
-
-.incorrect{
-width: 100%;
-  height: 35vh;
-  background-color: red;
-  border-radius: 5%;
-}
-.Choices{
-    background-color: #777;
-    text-align: center;
-    list-style-type: none;
-    line-height: 500%;
-    border-radius: 15%;
-    margin-bottom: 2%;
-}
-.Choices:hover{
-    background-color: #999;
-
-}
-#forMedia{
-    float:left;
-    width: 50%;
-    height: 100%;
-}
-#forQuestions{
-    float:left;
-    width: 50%;
-    height: 100%;
-}
-#displayImage{
-    padding-left: 10%;
-    width: 60%;
-}
-#displaySound{
-     float:left;
-    width: 50%;
-    height: 100%;
-    padding-left: 10%;  
-    padding-top: 5%;
-    font-size: 1000%;
-}
-#headliner{
-    text-align: center;
-}
-#TestContainer{
-  width: 100%;
-  height: 80%;
-  background-color: #666;
-  border-radius: 5%;
-
-}
-h1{
-  text-align: center;
-}
-h2{
-  text-align: center;
-}
-</style> -->
