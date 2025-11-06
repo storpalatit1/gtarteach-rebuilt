@@ -10,6 +10,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     AudioPlayer: typeof import('./components/AudioPlayer.vue')['default']
     Correct: typeof import('./components/Correct.vue')['default']
+    Fretboard: typeof import('./components/Fretboard.vue')['default']
+    FretboardInteractive: typeof import('./components/FretboardInteractive.vue')['default']
     NavigationBar: typeof import('./components/NavigationBar.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

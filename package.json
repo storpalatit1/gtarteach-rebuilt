@@ -22,6 +22,7 @@
     "@vueuse/core": "catalog:frontend",
     "nprogress": "catalog:frontend",
     "pinia": "catalog:frontend",
+    "tone": "catalog:frontend",
     "vue": "catalog:frontend",
     "vue-i18n": "catalog:frontend",
     "vue-router": "catalog:frontend"
@@ -36,7 +37,7 @@
     "@unocss/eslint-config": "catalog:build",
     "@vitejs/plugin-vue": "catalog:build",
     "@vue-macros/volar": "catalog:dev",
-    "@vue/devtools-kit": "7.6.4",
+    "@vue/devtools-kit": "catalog:dev",
     "@vue/test-utils": "catalog:dev",
     "beasties": "catalog:build",
     "cypress": "catalog:dev",
