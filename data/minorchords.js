@@ -24,7 +24,6 @@ export default [
     positions: [
       { string: 5, fret: 3 },
       { string: 4, fret: 1 },
-      { string: 3, fret: 0 },
     ],
   },
   {
@@ -33,7 +32,7 @@ export default [
     positions: [
       { string: 5, fret: 2 },
       { string: 4, fret: 2 },
-      { string: 3, fret: 1 },
+
     ],
   },
   {

@@ -25,12 +25,12 @@ let pitchShift: Tone.PitchShift | null = null
 
 // map strings to sample file paths (put these in /public/notes/)
 const samplePaths: Record<number, string> = {
-  1: '/notes/6/E.mp3',
-  2: '/notes/5/B.mp3',
-  3: '/notes/4/G.mp3',
-  4: '/notes/3/D.mp3',
-  5: '/notes/2/A.mp3',
-  6: '/notes/1/E.mp3',
+  1: '/notes/open/E2.wav',
+  2: '/notes/open/B.wav',
+  3: '/notes/open/G.wav',
+  4: '/notes/open/D.wav',
+  5: '/notes/open/A.wav',
+  6: '/notes/open/E.wav',
 }
 
 // setup all players (called after user gesture)
@@ -142,7 +142,7 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
               :x2="(frets + 1) * 60"
               :y2="(stringIndex - 1) * 40 + 40"
               stroke="currentColor"
-              :stroke-width="stringIndex === 1 || stringIndex === strings ? 3 : 2"
+              :stroke-width="stringIndex === 6 || stringIndex === strings ? 3 : 2"
               class="text-foreground"
             />
 
