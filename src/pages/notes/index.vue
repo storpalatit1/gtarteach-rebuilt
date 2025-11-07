@@ -12,8 +12,8 @@
           Beginner: <div py-1 />
           <ul class="list-disc pl-6 space-y-3">
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/chords/basicMajorChordsVisual">
-                Basic Major Chords Visual Test
+              <RouterLink icon-btn to="/notes/stringNoteFinder">
+                String Skipping Note Finding
               </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">

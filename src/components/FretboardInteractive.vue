@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import * as Tone from 'tone'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const { positions = [], frets = 12 } = withDefaults(defineProps<FretboardProps>(), {
+const props = withDefaults(defineProps<FretboardProps>(), {
   frets: 12,
+  multiple: false,
+  modelValue: () => [],
 })
+const emit = defineEmits(['update:modelValue'])
 const strings = 6
 const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 
@@ -16,76 +19,100 @@ interface Position {
 interface FretboardProps {
   positions?: Position[]
   frets?: number
+  multiple?: boolean
+  modelValue?: Position[]
 }
 
-const activeNote = ref<{ string: number, fret: number } | null>(null)
+let synth: Tone.FMSynth | null = null
 
-const players: Record<number, Tone.Player> = {}
-let pitchShift: Tone.PitchShift | null = null
+const selectedNotes = ref<Position[]>([...props.modelValue])
 
-// map strings to sample file paths (put these in /public/notes/)
-const samplePaths: Record<number, string> = {
-  1: '/notes/open/E2.wav',
-  2: '/notes/open/B.wav',
-  3: '/notes/open/G.wav',
-  4: '/notes/open/D.wav',
-  5: '/notes/open/A.wav',
-  6: '/notes/open/E.wav',
-}
+watch(
+  () => props.modelValue,
+  newVal => (selectedNotes.value = [...newVal]),
+)
 
-// setup all players (called after user gesture)
 async function setupAudio() {
-  if (Object.keys(players).length === 0) {
-    Object.entries(samplePaths).forEach(([string, path]) => {
-      players[+string] = new Tone.Player(path).toDestination()
-    })
-  }
-
-  if (!pitchShift) {
-    pitchShift = new Tone.PitchShift(0).toDestination()
-  }
+  await Tone.start()
+  if (!synth)
+    synth = new Tone.FMSynth().toDestination()
 }
 
-// called when a fret circle is clicked
-async function onNoteClick(stringIndex: number, fretIndex: number) {
-  // unlock audio context on first click
-  if (Tone.context.state !== 'running') {
-    await Tone.start()
-    // console.log("Audio context started by user interaction");
+const noteNames = [
+  'C',
+  'C#',
+  'D',
+  'D#',
+  'E',
+  'F',
+  'F#',
+  'G',
+  'G#',
+  'A',
+  'A#',
+  'B',
+]
+
+// Lowest string (6th) is E2 in standard tuning.
+const stringOpenNotes = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4']
+
+function getNoteName(stringIndex: number, fretIndex: number): string {
+  // Example: stringIndex = 6 (low E string)
+  const openNote = stringOpenNotes[strings - stringIndex]
+  const match = openNote.match(/([A-G]#?)(\d)/)
+  if (!match)
+    return 'N/A'
+
+  const [, openNoteName, octaveStr] = match
+  let octave = Number.parseInt(octaveStr)
+  let semitoneIndex = noteNames.indexOf(openNoteName) + fretIndex
+
+  // Adjust octave if we go above 11 semitones
+  while (semitoneIndex >= 12) {
+    semitoneIndex -= 12
+    octave++
   }
 
+  return `${noteNames[semitoneIndex]}${octave}`
+}
+
+// const getNoteFrequency = (stringIndex: number, fretIndex: number): number => {
+//   const baseFrequencies = [82.41, 110, 146.83, 196, 246.94, 329.63];
+//   const openFreq = baseFrequencies[strings - stringIndex];
+//   return openFreq * Math.pow(2, fretIndex / 12);
+// };
+async function onNoteClick(stringIndex: number, fretIndex: number) {
   await setupAudio()
 
-  activeNote.value = { string: stringIndex, fret: fretIndex }
+  const noteName = getNoteName(stringIndex, fretIndex)
+  synth?.triggerAttackRelease(noteName, '8n') // ✅ this one only
 
-  const player = players[stringIndex]
-  if (!player)
-    return
+  const pos = { string: stringIndex, fret: fretIndex, note: noteName }
 
-  // clone the player to avoid overlap
-  const cloned = new Tone.Player(player.buffer).connect(pitchShift!)
+  const existingIndex = selectedNotes.value.findIndex(
+    n => n.string === pos.string && n.fret === pos.fret,
+  )
 
-  // 🧠 only apply pitch shifting when fret > 0
-  if (fretIndex > 0 && pitchShift) {
-    pitchShift.pitch = fretIndex
+  if (existingIndex >= 0) {
+    selectedNotes.value.splice(existingIndex, 1)
   }
-  else if (pitchShift) {
-    pitchShift.pitch = 0 // reset to normal pitch
+  else {
+    if (!props.multiple) {
+      selectedNotes.value = [pos]
+    }
+    else {
+      selectedNotes.value.push(pos)
+    }
   }
-  cloned.fadeIn = 0.01
-  cloned.fadeOut = 0.1
-  cloned.start()
+
+  emit('update:modelValue', [...selectedNotes.value])
 }
-
-// highlight pressed notes
 function getNoteColor(stringIndex: number, fretIndex: number) {
-  if (
-    activeNote.value?.string === stringIndex
-    && activeNote.value?.fret === fretIndex
-  ) {
-    return '#10b981' // active note
-  }
-  return '#9ca3af' // default
+  return selectedNotes.value.some(
+    n => n.string === stringIndex && n.fret === fretIndex,
+  )
+    ? '#10b981' // selected
+    : '#9ca3af' // default
 }
 </script>
 
@@ -126,9 +153,9 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
               :x="(fretIndex - 1) * 60 + 30"
               y="15"
               text-anchor="middle"
+              :fill="isDark ? '#fff' : '#1f2937'"
               class="text-xs"
               style="font-size: 12px"
-              fill="#6b7280"
             >
               {{ fretIndex - 1 }}
             </text>

@@ -30,6 +30,7 @@
 interface Position {
   string: number
   fret: number
+  note?: string // optional but helpful
 }
 
 interface FretboardProps {
