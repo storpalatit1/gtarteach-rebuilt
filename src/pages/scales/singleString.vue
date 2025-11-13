@@ -9,15 +9,15 @@ import Fretboard from '~/components/Fretboard.vue'
 const canonicalChromatic = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 const modes = ['major', 'minor']
 /* Enharmonic helpers (for index lookup) */
-// const flatToSharp = {
-//   'Bb': 'A#',
-//   'Db': 'C#',
-//   'Eb': 'D#',
-//   'Gb': 'F#',
-//   'Ab': 'G#',
-//   'Cb': 'B',
-//   'Fb': 'E'
-// }
+const flatToSharp = {
+  Bb: 'A#',
+  Db: 'C#',
+  Eb: 'D#',
+  Gb: 'F#',
+  Ab: 'G#',
+  Cb: 'B',
+  Fb: 'E',
+}
 // const sharpToFlat = {
 //   'A#': 'Bb',
 //   'C#': 'Db',
@@ -30,8 +30,8 @@ const modes = ['major', 'minor']
 const flatKeys = ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb']
 
 /* Intervals for major/minor (used as semitone steps) */
-// const majorScaleInterval = [2,2,1,2,2,2,1]
-// const minorScaleInterval = [2,1,2,2,1,2,2]
+const majorScaleInterval = [2, 2, 1, 2, 2, 2, 1]
+const minorScaleInterval = [2, 1, 2, 2, 1, 2, 2]
 
 /* Standard open strings (names) — used only for lookup; actual index is from canonicalChromatic */
 const openStrings = ['E', 'B', 'G', 'D', 'A', 'E'] // string 6 -> string 1
@@ -69,11 +69,9 @@ function getDisplayChromaticForKey(keyRoot) {
    ------------------------------------------------------------------ */
 function getScaleNotes(rootNote, mode = 'major') {
   // Define intervals (in semitones)
-  const majorScaleInterval = [2, 2, 1, 2, 2, 2, 1] // W-W-H-W-W-W-H
-  const naturalMinorInterval = [2, 1, 2, 2, 1, 2, 2] // W-H-W-W-H-W-W
 
   // Choose interval pattern based on mode
-  const intervals = mode === 'major' ? majorScaleInterval : naturalMinorInterval
+  const intervals = mode === 'major' ? majorScaleInterval : minorScaleInterval
 
   const displayChromatic = getDisplayChromaticForKey(rootNote)
 
