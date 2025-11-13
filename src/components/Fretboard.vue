@@ -30,18 +30,20 @@
 interface Position {
   string: number
   fret: number
-  note?: string // optional but helpful
+  note?: string
+  isRoot?: boolean // ✅ add this line
 }
 
 interface FretboardProps {
   positions: Position[]
   frets?: number
+  showNotes?: boolean // ✅ add this
 }
 
-const { positions, frets } = withDefaults(defineProps<FretboardProps>(), {
+const { positions, frets, showNotes } = withDefaults(defineProps<FretboardProps>(), {
   frets: 12,
+  showNotes: false,
 })
-
 const strings = 6
 const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 </script>
@@ -116,28 +118,37 @@ const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
             />
 
             <!-- Finger positions -->
+            <!-- Finger positions -->
             <g
               v-for="(pos, index) in positions"
               :key="`pos-${index}`"
               :transform="`translate(${pos.fret * 60 + 18}, ${(pos.string - 1) * 40 + 28})`"
             >
-              <!-- Your icon -->
-              <path
-                fill="currentColor"
-                d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
-                class="fill-primary"
+              <!-- Marker circle (different color for roots) -->
+              <circle
+                cx="12"
+                cy="12"
+                r="12"
+                :class="pos.isRoot
+                  ? 'fill-blue-400 dark:fill-white stroke-blue-700 dark:stroke-white text-gray-100'
+                  : 'fill-gray-200 stroke-gray-800 dark:fill-black dark:stroke-gray-100 text-white'"
               />
-              <!-- <text
-                :x="pos.fret * 60 + 30"
-                :y="(pos.string - 1) * 40 + 40"
+
+              <!-- Label -->
+              <text
+                v-if="showNotes"
+                x="12"
+                y="12"
                 text-anchor="middle"
-                dominant-baseline="central"
-                class="fill-primary-foreground font-bold"
+                dominant-baseline="middle"
+                :fill="pos.isRoot ? '#ffffff dark:black' : 'black dark:white'"
+                class="font-bold"
                 style="font-size: 14px"
               >
-                {{ index + 1 }}
-              </text> -->
+                {{ pos.note }}
+              </text>
             </g>
+
           </svg>
         </div>
       </div>

@@ -67,7 +67,7 @@ useHead({
           </div>
         </div>
       </RouterLink>
-      <RouterLink icon-btn to="/about" class="category h-4/5 w-4/5 border-2 border-blue-400 rounded-lg dark:border-2 dark:border-gray-100">
+      <RouterLink icon-btn to="/scales" class="category h-4/5 w-4/5 border-2 border-blue-400 rounded-lg dark:border-2 dark:border-gray-100">
         <div class="h-full w-full pl-2 pt-2">
           <div class="flex items-center gap-2 text-4 font-semibold">
             <svg
@@ -86,7 +86,7 @@ useHead({
           </div>
         </div>
       </RouterLink>
-      <RouterLink icon-btn to="/notes/fretboard" class="category h-4/5 w-4/5 border-2 border-blue-400 rounded-lg dark:border-2 dark:border-gray-100">
+      <RouterLink icon-btn to="/fretboard" class="category h-4/5 w-4/5 border-2 border-blue-400 rounded-lg dark:border-2 dark:border-gray-100">
         <div class="h-full w-full pl-2 pt-2">
           <div class="flex items-center gap-2 text-4 font-semibold">
             <svg

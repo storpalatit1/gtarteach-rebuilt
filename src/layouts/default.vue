@@ -29,9 +29,13 @@
         <RouterLink icon-btn to="/notes">
           Notes
         </RouterLink>
+        <RouterLink icon-btn to="/scales">
+          Scales
+        </RouterLink>
         <RouterLink icon-btn to="/fretboard">
           Fretboard
         </RouterLink>
+
         <button icon-btn title="toggle dark" @click="toggleDark()">
           <div i="carbon-sun dark:carbon-moon" />
         </button>

@@ -2,18 +2,13 @@
 import * as Tone from 'tone'
 import { ref, watch } from 'vue'
 
-const props = withDefaults(defineProps<FretboardProps>(), {
-  frets: 12,
-  multiple: false,
-  modelValue: () => [],
-})
-const emit = defineEmits(['update:modelValue'])
-const strings = 6
-const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
-
+// --------------------------------------------------------------------
+// Props and types
+// --------------------------------------------------------------------
 interface Position {
   string: number
   fret: number
+  note?: string
 }
 
 interface FretboardProps {
@@ -23,41 +18,44 @@ interface FretboardProps {
   modelValue?: Position[]
 }
 
-let synth: Tone.FMSynth | null = null
+const props = withDefaults(defineProps<FretboardProps>(), {
+  frets: 12,
+  multiple: false,
+  modelValue: () => [],
+})
 
-const selectedNotes = ref<Position[]>([...props.modelValue])
+const emit = defineEmits(['update:modelValue'])
+const strings = 6
+const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 
-watch(
-  () => props.modelValue,
-  newVal => (selectedNotes.value = [...newVal]),
-)
+// --------------------------------------------------------------------
+// Tone.js Sampler setup
+// --------------------------------------------------------------------
 
-async function setupAudio() {
-  await Tone.start()
-  if (!synth)
-    synth = new Tone.FMSynth().toDestination()
-}
+const sampler = new Tone.Sampler({
+  urls: {
+    'A2': 'A2.mp3',
+    'C3': 'C3.mp3',
+    'D#3': 'Ds3.mp3',
+    'F#3': 'Fs3.mp3',
+  },
+  baseUrl: 'https://tonejs.github.io/audio/salamander/',
+  release: 1,
+}).toDestination()
 
-const noteNames = [
-  'C',
-  'C#',
-  'D',
-  'D#',
-  'E',
-  'F',
-  'F#',
-  'G',
-  'G#',
-  'A',
-  'A#',
-  'B',
-]
+const isLoaded = ref(false)
 
-// Lowest string (6th) is E2 in standard tuning.
+Tone.loaded().then(() => {
+  isLoaded.value = true
+})
+
+// --------------------------------------------------------------------
+// Note helpers
+// --------------------------------------------------------------------
+const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 const stringOpenNotes = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4']
 
 function getNoteName(stringIndex: number, fretIndex: number): string {
-  // Example: stringIndex = 6 (low E string)
   const openNote = stringOpenNotes[strings - stringIndex]
   const match = openNote.match(/([A-G]#?)(\d)/)
   if (!match)
@@ -67,7 +65,6 @@ function getNoteName(stringIndex: number, fretIndex: number): string {
   let octave = Number.parseInt(octaveStr)
   let semitoneIndex = noteNames.indexOf(openNoteName) + fretIndex
 
-  // Adjust octave if we go above 11 semitones
   while (semitoneIndex >= 12) {
     semitoneIndex -= 12
     octave++
@@ -76,19 +73,28 @@ function getNoteName(stringIndex: number, fretIndex: number): string {
   return `${noteNames[semitoneIndex]}${octave}`
 }
 
-// const getNoteFrequency = (stringIndex: number, fretIndex: number): number => {
-//   const baseFrequencies = [82.41, 110, 146.83, 196, 246.94, 329.63];
-//   const openFreq = baseFrequencies[strings - stringIndex];
-//   return openFreq * Math.pow(2, fretIndex / 12);
-// };
-async function onNoteClick(stringIndex: number, fretIndex: number) {
-  await setupAudio()
+// --------------------------------------------------------------------
+// State
+// --------------------------------------------------------------------
+const selectedNotes = ref<Position[]>([...props.modelValue])
 
+watch(
+  () => props.modelValue,
+  newVal => (selectedNotes.value = [...newVal]),
+)
+
+// --------------------------------------------------------------------
+// Play note & toggle selection
+// --------------------------------------------------------------------
+async function onNoteClick(stringIndex: number, fretIndex: number) {
+  if (!isLoaded.value)
+    return console.warn('Sampler not loaded yet!')
+
+  await Tone.start()
   const noteName = getNoteName(stringIndex, fretIndex)
-  synth?.triggerAttackRelease(noteName, '8n') // ✅ this one only
+  sampler.triggerAttackRelease(noteName, '8n')
 
   const pos = { string: stringIndex, fret: fretIndex, note: noteName }
-
   const existingIndex = selectedNotes.value.findIndex(
     n => n.string === pos.string && n.fret === pos.fret,
   )
@@ -97,124 +103,123 @@ async function onNoteClick(stringIndex: number, fretIndex: number) {
     selectedNotes.value.splice(existingIndex, 1)
   }
   else {
-    if (!props.multiple) {
+    if (!props.multiple)
       selectedNotes.value = [pos]
-    }
-    else {
-      selectedNotes.value.push(pos)
-    }
+    else selectedNotes.value.push(pos)
   }
 
   emit('update:modelValue', [...selectedNotes.value])
 }
+
+// --------------------------------------------------------------------
+// Coloring logic
+// --------------------------------------------------------------------
 function getNoteColor(stringIndex: number, fretIndex: number) {
-  return selectedNotes.value.some(
-    n => n.string === stringIndex && n.fret === fretIndex,
-  )
-    ? '#10b981' // selected
-    : '#9ca3af' // default
+  const isScaleNote
+    = props.positions?.some(n => n.string === stringIndex && n.fret === fretIndex) ?? false
+
+  const isSelected
+    = selectedNotes.value.some(n => n.string === stringIndex && n.fret === fretIndex)
+
+  if (isSelected)
+    return '#60A5FA' // blue = user-selected
+  if (isScaleNote)
+    return '#34D399' // green = scale note
+  return '#9ca3af' // gray = others
 }
 </script>
 
 <template>
-  <div class="py-1" />
-  <div class="w-full overflow-x-auto">
-    <div class="inline-block min-w-full">
-      <div class="relative" style="padding-top: 40px">
-        <!-- String names -->
-        <div
-          class="absolute left-0 top-0 flex flex-col"
-          :style="{
-            gap: `calc((100% - 40px) / 5)`,
-            height: 'calc(100% - 40px)',
-            transform: 'translateY(40px)',
-          }"
-        >
+  <div class="fretboard">
+    <div class="py-1" />
+    <div class="w-full overflow-x-auto">
+      <div class="inline-block min-w-full">
+        <div class="relative" style="padding-top: 40px">
+          <!-- String names -->
           <div
-            v-for="(name, i) in stringNames"
-            :key="i"
-            class="text-muted-foreground w-8 pr-2 text-right text-xs font-medium -mt-2"
+            class="absolute left-0 top-0 flex flex-col"
+            :style="{
+              gap: `calc((100% - 40px) / 5)`,
+              height: 'calc(100% - 40px)',
+              transform: 'translateY(40px)',
+            }"
           >
-            {{ name }}
+            <div
+              v-for="(name, i) in stringNames"
+              :key="i"
+              class="text-muted-foreground w-8 pr-2 text-right text-xs font-medium -mt-2"
+            >
+              {{ name }}
+            </div>
           </div>
-        </div>
 
-        <!-- Fretboard -->
-        <div class="ml-10">
-          <svg
-            :viewBox="`0 0 ${(frets + 1) * 60} ${strings * 40}`"
-            class="w-full"
-            :style="{ maxWidth: `${(frets + 1) * 60}px` }"
-          >
-            <!-- Fret numbers -->
-            <text
-              v-for="fretIndex in frets + 1"
-              :key="`fret-${fretIndex}`"
-              :x="(fretIndex - 1) * 60 + 30"
-              y="15"
-              text-anchor="middle"
-              :fill="isDark ? '#fff' : '#1f2937'"
-              class="text-xs"
-              style="font-size: 12px"
+          <!-- SVG fretboard -->
+          <div class="ml-10">
+            <svg
+              :viewBox="`0 0 ${(frets + 1) * 60} ${strings * 40}`"
+              class="w-full"
+              :style="{ maxWidth: `${(frets + 1) * 60}px` }"
             >
-              {{ fretIndex - 1 }}
-            </text>
+              <!-- Fret numbers -->
+              <text
+                v-for="fretIndex in frets + 1"
+                :key="`fret-${fretIndex}`"
+                :x="(fretIndex - 1) * 60 + 30"
+                y="15"
+                text-anchor="middle"
+                class="text-xs"
+                style="font-size: 12px; fill: #1f2937"
+              >
+                {{ fretIndex - 1 }}
+              </text>
 
-            <!-- Strings (horizontal lines) -->
-            <line
-              v-for="stringIndex in strings"
-              :key="`string-${stringIndex}`"
-              x1="0"
-              :y1="(stringIndex - 1) * 40 + 40"
-              :x2="(frets + 1) * 60"
-              :y2="(stringIndex - 1) * 40 + 40"
-              stroke="currentColor"
-              :stroke-width="stringIndex === 6 || stringIndex === strings ? 3 : 2"
-              class="text-foreground"
-            />
-
-            <!-- Frets (vertical lines) -->
-            <line
-              v-for="fretIndex in frets + 1"
-              :key="`fret-line-${fretIndex}`"
-              :x1="(fretIndex - 1) * 60"
-              y1="40"
-              :x2="(fretIndex - 1) * 60"
-              :y2="strings * 40 + 40"
-              stroke="currentColor"
-              :stroke-width="fretIndex === 1 ? 4 : 2"
-              class="text-foreground"
-            />
-
-            <!-- Clickable notes -->
-            <g v-for="stringIndex in strings" :key="`string-${stringIndex}`">
-              <circle
-                v-for="fretIndex in frets"
-                :key="`note-${stringIndex}-${fretIndex}`"
-                :cx="fretIndex * 60 - 30"
-                :cy="(stringIndex - 1) * 40 + 40"
-                r="10"
-                class="cursor-pointer transition-colors"
-                :fill="getNoteColor(stringIndex, fretIndex)"
-                @click="onNoteClick(stringIndex, fretIndex)"
+              <!-- Strings -->
+              <line
+                v-for="stringIndex in strings"
+                :key="`string-${stringIndex}`"
+                x1="0"
+                :y1="(stringIndex - 1) * 40 + 40"
+                :x2="(frets + 1) * 60"
+                :y2="(stringIndex - 1) * 40 + 40"
+                stroke="currentColor"
+                :stroke-width="stringIndex === 6 || stringIndex === strings ? 3 : 2"
               />
-            </g>
 
-            <!-- Chord positions from props -->
-            <g
-              v-for="(pos, index) in positions"
-              :key="`pos-${index}`"
-              :transform="`translate(${pos.fret * 60 + 18}, ${(pos.string - 1) * 40 + 28})`"
-            >
-              <path
-                fill="currentColor"
-                d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
-                class="fill-primary"
+              <!-- Frets -->
+              <line
+                v-for="fretIndex in frets + 1"
+                :key="`fret-line-${fretIndex}`"
+                :x1="(fretIndex - 1) * 60"
+                y1="40"
+                :x2="(fretIndex - 1) * 60"
+                :y2="strings * 40 + 40"
+                stroke="currentColor"
+                :stroke-width="fretIndex === 1 ? 4 : 2"
               />
-            </g>
-          </svg>
+
+              <!-- Notes -->
+              <g v-for="stringIndex in strings" :key="`string-${stringIndex}`">
+                <circle
+                  v-for="fretIndex in frets"
+                  :key="`note-${stringIndex}-${fretIndex}`"
+                  :cx="fretIndex * 60 - 30"
+                  :cy="(stringIndex - 1) * 40 + 40"
+                  r="10"
+                  class="cursor-pointer transition-colors"
+                  :fill="getNoteColor(stringIndex, fretIndex)"
+                  @click="onNoteClick(stringIndex, fretIndex)"
+                />
+              </g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.fretboard {
+  user-select: none;
+}
+</style>

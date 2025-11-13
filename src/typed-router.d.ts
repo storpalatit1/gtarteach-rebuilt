@@ -22,9 +22,12 @@ declare module 'vue-router/auto-routes' {
     '/[...all]': RouteRecordInfo<'/[...all]', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
     '/chords/': RouteRecordInfo<'/chords/', '/chords', Record<never, never>, Record<never, never>>,
+    '/chords/basicChordsAudio': RouteRecordInfo<'/chords/basicChordsAudio', '/chords/basicChordsAudio', Record<never, never>, Record<never, never>>,
+    '/chords/basicChordsAudiotheoretical': RouteRecordInfo<'/chords/basicChordsAudiotheoretical', '/chords/basicChordsAudiotheoretical', Record<never, never>, Record<never, never>>,
     '/chords/basicChordsVisual': RouteRecordInfo<'/chords/basicChordsVisual', '/chords/basicChordsVisual', Record<never, never>, Record<never, never>>,
     '/chords/basicMajorChordsVisual': RouteRecordInfo<'/chords/basicMajorChordsVisual', '/chords/basicMajorChordsVisual', Record<never, never>, Record<never, never>>,
     '/chords/basicMinorChordsVisual': RouteRecordInfo<'/chords/basicMinorChordsVisual', '/chords/basicMinorChordsVisual', Record<never, never>, Record<never, never>>,
+    '/chords/basicSeventhChordsVisual': RouteRecordInfo<'/chords/basicSeventhChordsVisual', '/chords/basicSeventhChordsVisual', Record<never, never>, Record<never, never>>,
     '/chords/listBasic': RouteRecordInfo<'/chords/listBasic', '/chords/listBasic', Record<never, never>, Record<never, never>>,
     '/chords/testAudio1': RouteRecordInfo<'/chords/testAudio1', '/chords/testAudio1', Record<never, never>, Record<never, never>>,
     '/chords/testGraphic1': RouteRecordInfo<'/chords/testGraphic1', '/chords/testGraphic1', Record<never, never>, Record<never, never>>,
@@ -36,5 +39,7 @@ declare module 'vue-router/auto-routes' {
     '/notes/openStringTest': RouteRecordInfo<'/notes/openStringTest', '/notes/openStringTest', Record<never, never>, Record<never, never>>,
     '/notes/stringNoteFinder': RouteRecordInfo<'/notes/stringNoteFinder', '/notes/stringNoteFinder', Record<never, never>, Record<never, never>>,
     '/README': RouteRecordInfo<'/README', '/README', Record<never, never>, Record<never, never>>,
+    '/scales/': RouteRecordInfo<'/scales/', '/scales', Record<never, never>, Record<never, never>>,
+    '/scales/singleString': RouteRecordInfo<'/scales/singleString', '/scales/singleString', Record<never, never>, Record<never, never>>,
   }
 }

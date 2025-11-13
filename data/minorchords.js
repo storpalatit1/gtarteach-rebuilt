@@ -30,6 +30,7 @@ export default [
     id: 4,
     name: 'E Minor',
     positions: [
+      { string: 6, fret: 0 },
       { string: 5, fret: 2 },
       { string: 4, fret: 2 },
 
