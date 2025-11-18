@@ -7,7 +7,7 @@ import Fretboard from '~/components/Fretboard.vue'
    Index: 0=C, 1=C#, 2=D, ... 11=B
    ------------------------------------------------------------------ */
 const canonicalChromatic = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-const modes = ['major', 'minor']
+const modes = ['major', 'minor', 'dorian', 'lydian', 'aeolian (minor)', 'phrygian', 'mixolydian', 'locrian', 'ionian (major)']
 /* Enharmonic helpers (for index lookup) */
 const flatToSharp = {
   Bb: 'A#',
@@ -32,6 +32,11 @@ const flatKeys = ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb']
 /* Intervals for major/minor (used as semitone steps) */
 const majorScaleInterval = [2, 2, 1, 2, 2, 2, 1]
 const minorScaleInterval = [2, 1, 2, 2, 1, 2, 2]
+const dorianScaleInterval = [2, 1, 2, 2, 2, 1, 2]
+const phrygianScaleInterval = [1, 2, 2, 2, 1, 2, 2]
+const lydianScaleInterval = [2, 2, 2, 1, 2, 2, 1]
+const mixolydianScaleInterval = [2, 2, 1, 2, 2, 1, 2]
+const locrianScaleInterval = [1, 2, 2, 1, 2, 2, 2]
 
 /* Standard open strings (names) — used only for lookup; actual index is from canonicalChromatic */
 const openStrings = ['E', 'B', 'G', 'D', 'A', 'E'] // string 6 -> string 1
@@ -71,7 +76,37 @@ function getScaleNotes(rootNote, mode = 'major') {
   // Define intervals (in semitones)
 
   // Choose interval pattern based on mode
-  const intervals = mode === 'major' ? majorScaleInterval : minorScaleInterval
+  let intervals
+
+  switch (mode) {
+    case 'major':
+      intervals = majorScaleInterval
+      break
+    case 'ionian (major)':
+      intervals = majorScaleInterval
+      break
+    case 'minor' :
+      intervals = minorScaleInterval
+      break
+    case 'aeolian (minor)':
+      intervals = minorScaleInterval
+      break
+    case 'dorian':
+      intervals = dorianScaleInterval
+      break
+    case 'phrygian':
+      intervals = phrygianScaleInterval
+      break
+    case 'lydian':
+      intervals = lydianScaleInterval
+      break
+    case 'mixolydian':
+      intervals = mixolydianScaleInterval
+      break
+    case 'locrian':
+      intervals = locrianScaleInterval
+      break
+  }
 
   const displayChromatic = getDisplayChromaticForKey(rootNote)
 
@@ -184,7 +219,8 @@ const roots = uiRootChoices
     <!-- Fretboard (your existing component) -->
     <Fretboard
       :positions="positions"
-      :frets="13"
+      :start-fret="0"
+      :end-fret="12"
       :show-notes="true"
     />
 
@@ -225,7 +261,7 @@ const roots = uiRootChoices
 
     <div py-2 />
     <div class="w-full flex items-center justify-center pr-40">
-      <div class="grid grid-cols-2 h-20 w-2/3 place-items-center gap-0.5 border-2 border-blue-400 rounded-lg p-1 dark:border-gray-100">
+      <div class="grid grid-cols-9 h-20 w-full place-items-center gap-0.5 border-2 border-blue-400 rounded-lg p-1 dark:border-gray-100">
         <button
           v-for="mode in modes"
           :key="mode"

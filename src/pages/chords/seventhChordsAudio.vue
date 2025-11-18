@@ -28,17 +28,29 @@ Tone.loaded().then(() => {
 // --------------------------------------------------------------------
 // 🎸 Open-position guitar chords (realistic voicings)
 // --------------------------------------------------------------------
-const openChords: Record<string, string[]> = {
-  'C Major': ['C3', 'E3', 'G3', 'C4', 'E4'], // x32010
-  'A Major': ['A2', 'E3', 'A3', 'C#4', 'E4'], // x02220
-  'A Minor': ['A2', 'E3', 'A3', 'C4', 'E4'], // x02210
-  'D Major': ['D3', 'A3', 'D4', 'F#4'], // xx0232
-  'D Minor': ['D3', 'A3', 'D4', 'F4'], // xx0231
-  'E Major': ['E2', 'B2', 'E3', 'G#3', 'B3', 'E4'], // 022100
-  'E Minor': ['E2', 'B2', 'E3', 'G3', 'B3', 'E4'], // 022000
-  'G Major': ['G2', 'B2', 'D3', 'G3', 'B3', 'G4'], // 320003
-}
+const seventhChords: Record<string, string[]> = {
+  // --- Major 7th ---
+  Cmaj7: ['C3', 'E3', 'G3', 'B3', 'E4'], // x32000
+  Amaj7: ['A2', 'E3', 'G#3', 'C#4', 'E4'], // x02120
+  Dmaj7: ['D3', 'A3', 'C#4', 'F#4'], // xx0222
+  Emaj7: ['E2', 'B2', 'E3', 'G#3', 'D#4', 'E4'], // 021100 (corrected open voicing)
+  Gmaj7: ['G2', 'B2', 'D3', 'F#3', 'B3', 'G4'], // 320002
 
+  // --- Dominant 7th ---
+  C7: ['C3', 'E3', 'G3', 'Bb3', 'C4', 'E4'], // x32310 (corrected no high C5/E5)
+  A7: ['A2', 'E3', 'G3', 'C#4', 'E4'], // x02020
+  D7: ['D3', 'A3', 'C4', 'F#4'], // xx0212
+  E7: ['E2', 'B2', 'E3', 'G#3', 'D4', 'E4'], // 020100
+  G7: ['G2', 'B2', 'D3', 'F3', 'B3', 'G4'], // 320001
+
+  // --- Minor 7th ---
+  Am7: ['A2', 'E3', 'G3', 'C4', 'E4'], // x02010
+  Dm7: ['D3', 'A3', 'C4', 'F4'], // xx0211
+  Em7: ['E2', 'B2', 'D3', 'G3', 'B3', 'E4'], // 020000
+
+  // Real open-position-compatible Gm7 (your version was impossible)
+  Gm7: ['G2', 'D3', 'F3', 'Bb3', 'D4', 'G4'], // 353333 → notes only
+}
 // --------------------------------------------------------------------
 // 🧠 App State
 // --------------------------------------------------------------------
@@ -52,9 +64,9 @@ const shuffle = (arr: any[]) => [...arr].sort(() => Math.random() - 0.5)
 
 // 🔊 Chord playback + quiz logic
 function getRandomOpenChord() {
-  const chordNames = Object.keys(openChords)
+  const chordNames = Object.keys(seventhChords)
   const randomChord = chordNames[Math.floor(Math.random() * chordNames.length)]
-  const notes = openChords[randomChord]
+  const notes = seventhChords[randomChord]
   return { name: randomChord, notes }
 }
 
@@ -68,7 +80,7 @@ async function playChord(notes: string[]) {
 }
 
 function generateQuestion() {
-  const chordNames = Object.keys(openChords)
+  const chordNames = Object.keys(seventhChords)
 
   // Pick a random correct chord
   const correctChord = getRandomOpenChord()

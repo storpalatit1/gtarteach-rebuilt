@@ -1,9 +1,12 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import diminishedChords from '~/../data/diminishedchords.js'
 import majorChords from '~/../data/majorchords.js'
+import minorchords from '~/../data/minorchords.js'
+import seventhChords from '~/../data/seventhchords.js'
 import Fretboard from '~/components/Fretboard.vue'
 
-const chords = majorChords
+const chords = majorChords.concat(minorchords, diminishedChords, seventhChords)
 // Reactive state
 const currentChord = ref(chords[0])
 const options = ref([])
@@ -50,7 +53,7 @@ onMounted(() => {
   <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
       <h1 class="mb-4 text-2xl font-bold">
-        Basic Major Chords Test
+        Basic Chords Test
       </h1>
       <Fretboard :positions="currentChord.positions" :start-fret="0" :end-fret="5" />
       <div py-2 />

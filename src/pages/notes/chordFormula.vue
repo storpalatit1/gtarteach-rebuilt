@@ -1,46 +1,43 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import majorChords from '~/../data/majorchords.js'
-import Fretboard from '~/components/Fretboard.vue'
 
-const chords = majorChords
-// Reactive state
-const currentChord = ref(chords[0])
-const options = ref([])
-const selectedAnswer = ref(null)
+const selectedChord = ref('')
+const selectedChordFormula = ref([''])
+const selectedAnswer = ref(false)
+const chordTypes
+= [
+  { name: 'Major', formula: ['1', '3', '5'] },
+  { name: 'Minor', formula: ['1', 'b3', '5'] },
+  { name: 'Dominant 7', formula: ['1', '3', '5', 'b7'] },
+  { name: 'Major 7', formula: ['1', '3', '5', '7'] },
+  { name: 'Minor 7', formula: ['1', 'b3', '5', 'b7'] },
+  { name: 'Diminished', formula: ['1', 'b3', '#5'] },
+  { name: 'Half-Diminished (m7b5)', formula: ['1', 'b3', 'b5', 'b7'] },
+  { name: 'Augmented', formula: ['1', '3', '#5'] },
+]
 const score = ref({ correct: 0, total: 0 })
 
-// Shuffle helper
-const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
-
-// Generate a new question
 function generateQuestion() {
-  const correctChord = chords[Math.floor(Math.random() * chords.length)]
-  const wrongChords = chords.filter(c => c.name !== correctChord.name)
-  const shuffledWrong = shuffle(wrongChords).slice(0, 3)
-  const allOptions = shuffle([correctChord.name, ...shuffledWrong.map(c => c.name)])
+  const randomChordIndex = Math.floor(Math.random() * chordTypes.length)
+  const randomChordFormula = chordTypes[randomChordIndex].formula
+  const randomChord = chordTypes[randomChordIndex].name
 
-  currentChord.value = correctChord
-  options.value = allOptions
-  selectedAnswer.value = null
+  selectedChordFormula.value = randomChordFormula
+  selectedChord.value = randomChord
+  // console.log(randomChord,randomChordFormula);
 }
-
-// Handle user’s answer
 function handleAnswer(answer) {
   selectedAnswer.value = answer
-  const isCorrect = answer === currentChord.value.name
+  const isCorrect = answer === selectedChord.value
   score.value = {
     correct: score.value.correct + (isCorrect ? 1 : 0),
     total: score.value.total + 1,
   }
 }
-
-// Go to next question
 function handleNext() {
+  selectedAnswer.value = false
   generateQuestion()
 }
-
-// Initialize on mount
 onMounted(() => {
   generateQuestion()
 })
@@ -49,30 +46,26 @@ onMounted(() => {
 <template>
   <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
-      <h1 class="mb-4 text-2xl font-bold">
-        Basic Major Chords Test
-      </h1>
-      <Fretboard :positions="currentChord.positions" :start-fret="0" :end-fret="5" />
       <div py-2 />
       <div class="border-1.5 border-blue-400 rounded-lg dark:border-gray-100">
         <h4 class="mb-3 text-lg font-semibold">
           What chord is this?
         </h4>
-
+        {{ selectedChordFormula.join(' - ') }}
         <div class="grid grid-cols-2 gap-3">
           <button
-            v-for="option in options"
-            :key="option"
+            v-for="option in chordTypes"
+            :key="option.name"
             class="w-full border-1.25 border-blue-400 rounded-lg px-2 py-1 transition dark:border-gray-100"
             :class="{
-              'bg-green-500 text-white': selectedAnswer === option && option === currentChord.name,
-              'bg-red-500 text-white': selectedAnswer === option && option !== currentChord.name,
+              'bg-green-500 text-white': selectedAnswer === option.name && option.name === selectedChord,
+              'bg-red-500 text-white': selectedAnswer === option.name && option.name !== selectedChord,
               'hover:bg-gray-100 dark:hover:bg-gray-800': !selectedAnswer,
             }"
             :disabled="!!selectedAnswer"
-            @click="handleAnswer(option)"
+            @click="handleAnswer(option.name)"
           >
-            {{ option }}
+            {{ option.name }}
           </button>
         </div>
 

@@ -1,51 +1,36 @@
 <script setup lang="ts">
-// import * as Tone from "tone";
-// import { ref } from "vue";
-
-// const pitch = ref(0);
-
-// let player: Tone.Player | null = null;
-// let pitchShift: Tone.PitchShift | null = null;
-
-// const setupAudio = async () => {
-//   await Tone.start();
-//   if (!player) {
-//     player = new Tone.Player("/guitar-note.wav").toDestination();
-//   }
-//   if (!pitchShift) {
-//     pitchShift = new Tone.PitchShift(pitch.value).toDestination();
-//     player.connect(pitchShift);
-//   }
-// };
-
-// const updatePitch = () => {
-//   if (pitchShift) pitchShift.pitch = Number(pitch.value);
-// };
-
-// const playNote = async () => {
-//   if (!player) await setupAudio();
-//   player?.start();
-// };
-
 interface Position {
   string: number
   fret: number
   note?: string
-  isRoot?: boolean // ✅ add this line
+  isRoot?: boolean
 }
 
 interface FretboardProps {
   positions: Position[]
-  frets?: number
-  showNotes?: boolean // ✅ add this
+  showNotes?: boolean
+  startFret?: number
+  endFret?: number
 }
 
-const { positions, frets, showNotes } = withDefaults(defineProps<FretboardProps>(), {
-  frets: 12,
-  showNotes: false,
-})
+const { positions, showNotes, startFret, endFret } = withDefaults(
+  defineProps<FretboardProps>(),
+  {
+    showNotes: false,
+    startFret: 0,
+    endFret: 12,
+  },
+)
+
 const strings = 6
 const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
+const fretWidth = 60
+
+// compute visible frets from the provided range
+const visibleFrets = Array.from(
+  { length: endFret - startFret + 1 },
+  (_, i) => i + startFret,
+)
 </script>
 
 <template>
@@ -74,30 +59,30 @@ const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
         <!-- Fretboard -->
         <div class="ml-10">
           <svg
-            :viewBox="`0 0 ${(frets + 1) * 60} ${strings * 40}`"
+            :viewBox="`0 0 ${(visibleFrets.length + 1) * fretWidth} ${strings * 40}`"
             class="w-full"
-            :style="{ maxWidth: `${(frets + 1) * 60}px` }"
+            :style="{ maxWidth: `${(visibleFrets.length + 1) * fretWidth}px` }"
           >
             <!-- Fret numbers -->
             <text
-              v-for="fretIndex in frets + 1"
+              v-for="fretIndex in visibleFrets"
               :key="`fret-${fretIndex}`"
-              :x="(fretIndex - 1) * 60 + 30"
+              :x="(fretIndex - startFret) * fretWidth + 30"
               y="15"
               text-anchor="middle"
-              :fill="isDark ? '#fff' : '#1f2937'"
               class="text-xs"
-              style="font-size: 12px"
+              style="font-size: 12px; fill: var(--foreground-color, #1f2937)"
             >
-              {{ fretIndex - 1 }}
+              {{ fretIndex }}
             </text>
+
             <!-- Strings (horizontal lines) -->
             <line
               v-for="stringIndex in strings"
               :key="`string-${stringIndex}`"
               x1="0"
               :y1="(stringIndex - 1) * 40 + 40"
-              :x2="(frets + 1) * 60"
+              :x2="(visibleFrets.length + 1) * fretWidth"
               :y2="(stringIndex - 1) * 40 + 40"
               stroke="currentColor"
               :stroke-width="stringIndex === 1 || stringIndex === strings ? 3 : 2"
@@ -106,49 +91,49 @@ const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 
             <!-- Frets (vertical lines) -->
             <line
-              v-for="fretIndex in frets + 1"
+              v-for="(fretIndex, i) in visibleFrets"
               :key="`fret-line-${fretIndex}`"
-              :x1="(fretIndex - 1) * 60"
+              :x1="i * fretWidth"
               y1="40"
-              :x2="(fretIndex - 1) * 60"
+              :x2="i * fretWidth"
               :y2="strings * 40 + 40"
               stroke="currentColor"
-              :stroke-width="fretIndex === 1 ? 4 : 2"
+              :stroke-width="fretIndex === startFret ? 4 : 2"
               class="text-foreground"
             />
 
             <!-- Finger positions -->
-            <!-- Finger positions -->
             <g
-              v-for="(pos, index) in positions"
+              v-for="(pos, index) in positions.filter(
+                p => p.fret >= startFret && p.fret <= endFret,
+              )"
               :key="`pos-${index}`"
-              :transform="`translate(${pos.fret * 60 + 18}, ${(pos.string - 1) * 40 + 28})`"
+              :transform="`translate(${(pos.fret - startFret) * fretWidth + 18}, ${(pos.string - 1) * 40 + 28})`"
             >
-              <!-- Marker circle (different color for roots) -->
+              <!-- Marker circle -->
               <circle
                 cx="12"
                 cy="12"
                 r="12"
                 :class="pos.isRoot
-                  ? 'fill-blue-400 dark:fill-white stroke-blue-700 dark:stroke-white text-gray-100'
-                  : 'fill-gray-200 stroke-gray-800 dark:fill-black dark:stroke-gray-100 text-white'"
+                  ? 'fill-blue-400 dark:fill-white stroke-blue-700 dark:stroke-white'
+                  : 'fill-gray-200 stroke-gray-800 dark:fill-black dark:stroke-gray-100'"
               />
 
-              <!-- Label -->
+              <!-- Note label -->
               <text
                 v-if="showNotes"
                 x="12"
                 y="12"
                 text-anchor="middle"
                 dominant-baseline="middle"
-                :fill="pos.isRoot ? '#ffffff dark:black' : 'black dark:white'"
+                :fill="pos.isRoot ? '#ffffff' : 'black'"
                 class="font-bold"
                 style="font-size: 14px"
               >
                 {{ pos.note }}
               </text>
             </g>
-
           </svg>
         </div>
       </div>

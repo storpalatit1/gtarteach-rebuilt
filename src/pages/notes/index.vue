@@ -17,8 +17,13 @@
               </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/chords/basicMinorChordsVisual">
-                Basic Minor Chords Visual Test
+              <RouterLink icon-btn to="/notes/chordFormula">
+                Chord formulas
+              </RouterLink>
+            </li>
+            <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
+              <RouterLink icon-btn to="/notes/chordNameToFormula">
+                Chord Name to Formula
               </RouterLink>
             </li>
           </ul>
@@ -27,10 +32,19 @@
           Intermediate:
           <ul class="list-disc pl-6 space-y-3">
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              Basic Major 7th's Chords Visual Test
+              <RouterLink icon-btn to="/notes/chordNotes">
+                Chord Notes
+              </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              Basic Minor 7th's Chords Visual Test
+              <RouterLink icon-btn to="/notes/missingChordNotes">
+                Missing Chord Notes
+              </RouterLink>
+            </li>
+            <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
+              <RouterLink icon-btn to="/notes/intervalQuiz">
+                Interval Quiz
+              </RouterLink>
             </li>
           </ul>
         </div>
@@ -46,6 +60,14 @@
             </li>
           </ul>
         </div>
+      </div>
+    </div>
+    <div py-5 />
+    <div class="flex items-center justify-center">
+      <div class="h-15 w-1/3 border-2 border-blue-400 rounded-lg text-size-5 text-black dark:border-gray-200 dark:text-white">
+        <RouterLink icon-btn to="/trueOrFalse">
+          True or False, every category
+        </RouterLink>
       </div>
     </div>
   </main>

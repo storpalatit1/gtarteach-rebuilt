@@ -49,10 +49,7 @@ onMounted(() => {
 <template>
   <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
-      <h1 class="mb-4 text-2xl font-bold">
-        Basic Chords Test
-      </h1>
-      <Fretboard :positions="currentChord.positions" :frets="5" />
+      <Fretboard :positions="currentChord.positions" :start-fret="0" :end-fret="5" />
       <div py-2 />
       <div class="border-1.5 border-blue-400 rounded-lg dark:border-gray-100">
         <h4 class="mb-3 text-lg font-semibold">

@@ -28,15 +28,21 @@ Tone.loaded().then(() => {
 // --------------------------------------------------------------------
 // 🎸 Open-position guitar chords (realistic voicings)
 // --------------------------------------------------------------------
-const openChords: Record<string, string[]> = {
-  'C Major': ['C3', 'E3', 'G3', 'C4', 'E4'], // x32010
-  'A Major': ['A2', 'E3', 'A3', 'C#4', 'E4'], // x02220
-  'A Minor': ['A2', 'E3', 'A3', 'C4', 'E4'], // x02210
-  'D Major': ['D3', 'A3', 'D4', 'F#4'], // xx0232
-  'D Minor': ['D3', 'A3', 'D4', 'F4'], // xx0231
-  'E Major': ['E2', 'B2', 'E3', 'G#3', 'B3', 'E4'], // 022100
-  'E Minor': ['E2', 'B2', 'E3', 'G3', 'B3', 'E4'], // 022000
-  'G Major': ['G2', 'B2', 'D3', 'G3', 'B3', 'G4'], // 320003
+const openDiminishedChords: Record<string, string[]> = {
+  // -------------------------
+  // Half-diminished (m7♭5)
+  // -------------------------
+  Bm7b5: ['B2', 'F#3', 'A3', 'D4'],
+  Em7b5: ['E2', 'Bb2', 'D3', 'G3'],
+  Am7b5: ['A2', 'Eb3', 'G3', 'C4'],
+  // -------------------------
+  // Fully diminished (dim7)
+  // -------------------------
+  Bdim7: ['B2', 'D3', 'F3', 'Ab3'],
+
+  Edim7: ['E2', 'G2', 'Bb2', 'Db3'],
+  Adim7: ['A2', 'C3', 'Eb3', 'Gb3'],
+
 }
 
 // --------------------------------------------------------------------
@@ -52,9 +58,9 @@ const shuffle = (arr: any[]) => [...arr].sort(() => Math.random() - 0.5)
 
 // 🔊 Chord playback + quiz logic
 function getRandomOpenChord() {
-  const chordNames = Object.keys(openChords)
+  const chordNames = Object.keys(openDiminishedChords)
   const randomChord = chordNames[Math.floor(Math.random() * chordNames.length)]
-  const notes = openChords[randomChord]
+  const notes = openDiminishedChords[randomChord]
   return { name: randomChord, notes }
 }
 
@@ -68,7 +74,7 @@ async function playChord(notes: string[]) {
 }
 
 function generateQuestion() {
-  const chordNames = Object.keys(openChords)
+  const chordNames = Object.keys(openDiminishedChords)
 
   // Pick a random correct chord
   const correctChord = getRandomOpenChord()
@@ -85,6 +91,7 @@ function generateQuestion() {
   selectedAnswer.value = null
 
   playChord(correctChord.notes)
+  // console.log(currentChord.value)
 }
 
 function handleAnswer(answer: string) {
