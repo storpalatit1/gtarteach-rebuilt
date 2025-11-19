@@ -43,7 +43,7 @@ const currentScaleNotes = ref([])
 const hiddenNote = ref('C')
 const selectedAnswer = ref(null)
 const answered = ref(false) // ✅ new: track if user has answered
-
+const score = ref({ correct: 0, total: 0 })
 function getScaleNotes(rootNote, mode = 'major') {
   let intervals
   switch (mode) {
@@ -150,6 +150,10 @@ function handleAnswer(note) {
     return // prevent multiple guesses
   selectedAnswer.value = note
   answered.value = true
+  if (note === hiddenNote.value) {
+    score.value.correct++
+  }
+  score.value.total++
 }
 
 const notes = uiRootChoices
@@ -162,7 +166,7 @@ const notes = uiRootChoices
       <h2 class="mb-2 text-xl font-semibold">
         {{ chosenScale }}
       </h2>
-      <p class="mb-4 text-gray-600">
+      <p class="mb-4 text-gray-600 dark:text-white">
         One note from this scale is missing. Can you guess which one?
       </p>
 
@@ -193,13 +197,17 @@ const notes = uiRootChoices
         </div>
       </div>
 
-      <div class="mt-6 flex justify-center">
+      <div class="mt-2 flex justify-center">
         <button
-          class="rounded bg-blue-500 px-4 py-2 text-white dark:bg-gray-300 hover:bg-blue-600 dark:text-black dark:hover:bg-gray-400"
+          class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
           @click="generateQuestion"
         >
-          Next Question
+          Next
         </button>
+      </div>
+      <div py-2 />
+      <div class="text-sm text-gray-600 dark:text-gray-300">
+        Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
       </div>
     </div>
   </main>

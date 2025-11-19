@@ -60,6 +60,7 @@ function generateMinorScale(root) {
 }
 
 function generateQuestion() {
+  feedback.value = ''
   const randomRoot = notes[Math.floor(Math.random() * notes.length)]
   const randomMode = modes[Math.floor(Math.random() * modes.length)]
   const randomInterval = Math.floor(Math.random() * 6 + 1)
@@ -118,22 +119,25 @@ onMounted(() => {
       </div>
 
       <button
-        class="mt-4 rounded bg-blue-500 px-4 py-2 text-white dark:bg-gray-300 hover:bg-blue-600 dark:text-black dark:hover:bg-gray-400"
+        class="mr-2 mt-4 rounded bg-blue-500 px-4 py-2 text-white dark:bg-gray-300 hover:bg-blue-600 dark:text-black dark:hover:bg-gray-400"
+        :disabled="feedback !== ''"
         @click="handleAnswer"
       >
         Submit
       </button>
 
-      <p class="mt-4 font-semibold" :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'">
-        {{ feedback }}
-      </p>
-
       <button
-        class="mt-4 rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 dark:text-black"
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
         @click="handleNext"
       >
-        Next Question
+        Next
       </button>
+      <p v-if="feedback !== ''" class="mt-4 font-semibold" :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'">
+        {{ feedback }}
+      </p>
+      <div class="text-sm text-gray-600 dark:text-gray-300">
+        Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+      </div>
     </div>
   </main>
 </template>

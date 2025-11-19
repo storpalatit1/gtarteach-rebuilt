@@ -3,7 +3,7 @@ import * as Tone from 'tone'
 import { ref, watch } from 'vue'
 
 // --------------------------------------------------------------------
-// Props and types
+// Props & Types
 // --------------------------------------------------------------------
 interface Position {
   string: number
@@ -25,13 +25,13 @@ const props = withDefaults(defineProps<FretboardProps>(), {
 })
 
 const emit = defineEmits(['update:modelValue'])
+
 const strings = 6
 const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 
 // --------------------------------------------------------------------
-// Tone.js Sampler setup
+// Tone.js Sampler
 // --------------------------------------------------------------------
-
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -44,10 +44,7 @@ const sampler = new Tone.Sampler({
 }).toDestination()
 
 const isLoaded = ref(false)
-
-Tone.loaded().then(() => {
-  isLoaded.value = true
-})
+Tone.loaded().then(() => (isLoaded.value = true))
 
 // --------------------------------------------------------------------
 // Note helpers
@@ -61,16 +58,16 @@ function getNoteName(stringIndex: number, fretIndex: number): string {
   if (!match)
     return 'N/A'
 
-  const [, openNoteName, octaveStr] = match
-  let octave = Number.parseInt(octaveStr)
-  let semitoneIndex = noteNames.indexOf(openNoteName) + fretIndex
+  const [, base, octaveStr] = match
+  let octave = Number(octaveStr)
+  let semitone = noteNames.indexOf(base) + fretIndex
 
-  while (semitoneIndex >= 12) {
-    semitoneIndex -= 12
+  while (semitone >= 12) {
+    semitone -= 12
     octave++
   }
 
-  return `${noteNames[semitoneIndex]}${octave}`
+  return `${noteNames[semitone]}${octave}`
 }
 
 // --------------------------------------------------------------------
@@ -80,140 +77,122 @@ const selectedNotes = ref<Position[]>([...props.modelValue])
 
 watch(
   () => props.modelValue,
-  newVal => (selectedNotes.value = [...newVal]),
+  v => (selectedNotes.value = [...v]),
 )
 
 // --------------------------------------------------------------------
-// Play note & toggle selection
+// Click handler
 // --------------------------------------------------------------------
 async function onNoteClick(stringIndex: number, fretIndex: number) {
   if (!isLoaded.value)
-    return console.warn('Sampler not loaded yet!')
+    return
 
   await Tone.start()
-  const noteName = getNoteName(stringIndex, fretIndex)
-  sampler.triggerAttackRelease(noteName, '8n')
+  const note = getNoteName(stringIndex, fretIndex)
+  sampler.triggerAttackRelease(note, '8n')
 
-  const pos = { string: stringIndex, fret: fretIndex, note: noteName }
-  const existingIndex = selectedNotes.value.findIndex(
+  const pos = { string: stringIndex, fret: fretIndex, note }
+  const idx = selectedNotes.value.findIndex(
     n => n.string === pos.string && n.fret === pos.fret,
   )
 
-  if (existingIndex >= 0) {
-    selectedNotes.value.splice(existingIndex, 1)
-  }
-  else {
-    if (!props.multiple)
-      selectedNotes.value = [pos]
-    else selectedNotes.value.push(pos)
-  }
+  if (idx >= 0)
+    selectedNotes.value.splice(idx, 1)
+  else props.multiple ? selectedNotes.value.push(pos) : (selectedNotes.value = [pos])
 
   emit('update:modelValue', [...selectedNotes.value])
 }
 
 // --------------------------------------------------------------------
-// Coloring logic
+// Style: Note color
 // --------------------------------------------------------------------
 function getNoteColor(stringIndex: number, fretIndex: number) {
-  const isScaleNote
-    = props.positions?.some(n => n.string === stringIndex && n.fret === fretIndex) ?? false
+  const scale = props.positions?.some(
+    n => n.string === stringIndex && n.fret === fretIndex,
+  )
+  const selected = selectedNotes.value.some(
+    n => n.string === stringIndex && n.fret === fretIndex,
+  )
 
-  const isSelected
-    = selectedNotes.value.some(n => n.string === stringIndex && n.fret === fretIndex)
-
-  if (isSelected)
-    return '#60A5FA' // blue = user-selected
-  if (isScaleNote)
-    return '#34D399' // green = scale note
-  return '#9ca3af' // gray = others
+  if (selected)
+    return 'fill-blue-500 dark:fill-blue-400'
+  if (scale)
+    return 'fill-green-400 dark:fill-green-300'
+  return 'fill-gray-400 dark:fill-gray-200'
 }
 </script>
 
 <template>
-  <div class="fretboard">
-    <div class="py-1" />
-    <div class="w-full overflow-x-auto">
-      <div class="inline-block min-w-full">
-        <div class="relative" style="padding-top: 40px">
-          <!-- String names -->
-          <div
-            class="absolute left-0 top-0 flex flex-col"
-            :style="{
-              gap: `calc((100% - 40px) / 5)`,
-              height: 'calc(100% - 40px)',
-              transform: 'translateY(40px)',
-            }"
-          >
-            <div
-              v-for="(name, i) in stringNames"
-              :key="i"
-              class="text-muted-foreground w-8 pr-2 text-right text-xs font-medium -mt-2"
-            >
-              {{ name }}
-            </div>
-          </div>
+  <div class="w-screen flex items-center justify-center overflow-hidden">
+    <div class="inline-block overflow-x-auto">
+      <svg
+        :viewBox="`-40 0 ${(frets + 1) * 60 + 40} ${strings * 40}`"
+        :width="(frets + 1) * 60"
+        :height="strings * 40 + 40"
+        class="mx-auto block"
+      >
+        <!-- STRING NAMES (inside SVG) -->
+        <text
+          v-for="(name, i) in stringNames"
+          :key="`label-${i}`"
+          x="-20"
+          :y="(i * 40) + 40"
+          text-anchor="end"
+          class="fill-gray-800 text-xs dark:fill-gray-200"
+        >
+          {{ name }}
+        </text>
 
-          <!-- SVG fretboard -->
-          <div class="ml-10">
-            <svg
-              :viewBox="`0 0 ${(frets + 1) * 60} ${strings * 40}`"
-              class="w-full"
-              :style="{ maxWidth: `${(frets + 1) * 60}px` }"
-            >
-              <!-- Fret numbers -->
-              <text
-                v-for="fretIndex in frets + 1"
-                :key="`fret-${fretIndex}`"
-                :x="(fretIndex - 1) * 60 + 30"
-                y="15"
-                text-anchor="middle"
-                class="text-xs"
-                style="font-size: 12px; fill: #1f2937"
-              >
-                {{ fretIndex - 1 }}
-              </text>
+        <!-- Fret numbers -->
+        <text
+          v-for="i in frets + 1"
+          :key="`fret-${i}`"
+          :x="(i - 1) * 60 + 30"
+          y="15"
+          text-anchor="middle"
+          class="fill-gray-800 text-xs dark:fill-gray-200"
+        >
+          {{ i - 1 }}
+        </text>
 
-              <!-- Strings -->
-              <line
-                v-for="stringIndex in strings"
-                :key="`string-${stringIndex}`"
-                x1="0"
-                :y1="(stringIndex - 1) * 40 + 40"
-                :x2="(frets + 1) * 60"
-                :y2="(stringIndex - 1) * 40 + 40"
-                stroke="currentColor"
-                :stroke-width="stringIndex === 6 || stringIndex === strings ? 3 : 2"
-              />
+        <!-- Strings -->
+        <line
+          v-for="i in strings"
+          :key="`string-${i}`"
+          x1="0"
+          :x2="(frets + 1) * 60"
+          :y1="(i - 1) * 40 + 40"
+          :y2="(i - 1) * 40 + 40"
+          stroke="currentColor"
+          :stroke-width="i === 1 || i === strings ? 3 : 2"
+        />
 
-              <!-- Frets -->
-              <line
-                v-for="fretIndex in frets + 1"
-                :key="`fret-line-${fretIndex}`"
-                :x1="(fretIndex - 1) * 60"
-                y1="40"
-                :x2="(fretIndex - 1) * 60"
-                :y2="strings * 40 + 40"
-                stroke="currentColor"
-                :stroke-width="fretIndex === 1 ? 4 : 2"
-              />
+        <!-- Frets -->
+        <line
+          v-for="i in frets + 1"
+          :key="`fret-line-${i}`"
+          :x1="(i - 1) * 60"
+          :x2="(i - 1) * 60"
+          y1="40"
+          :y2="strings * 40 + 40"
+          stroke="currentColor"
+          :stroke-width="i === 1 ? 4 : 2"
+        />
 
-              <!-- Notes -->
-              <g v-for="stringIndex in strings" :key="`string-${stringIndex}`">
-                <circle
-                  v-for="fretIndex in frets"
-                  :key="`note-${stringIndex}-${fretIndex}`"
-                  :cx="fretIndex * 60 - 30"
-                  :cy="(stringIndex - 1) * 40 + 40"
-                  r="10"
-                  class="cursor-pointer transition-colors"
-                  :fill="getNoteColor(stringIndex, fretIndex)"
-                  @click="onNoteClick(stringIndex, fretIndex)"
-                />
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
+        <!-- Notes -->
+        <g v-for="i in strings" :key="`g-${i}`">
+          <circle
+            v-for="f in frets"
+            :key="`note-${i}-${f}`"
+            :cx="f * 60 - 30"
+            :cy="(i - 1) * 40 + 40"
+            r="10"
+            class="cursor-pointer transition-colors"
+            :class="getNoteColor(i, f)"
+            @click="onNoteClick(i, f)"
+          />
+        </g>
+      </svg>
     </div>
   </div>
 </template>

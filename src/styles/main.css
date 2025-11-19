@@ -27,3 +27,10 @@ html.dark {
   width: 100%;
   height: 2px;
 }
+
+.dark a:hover {
+  color: white !important; /* indigo-700 */
+}
+a:hover {
+  color: black !important;
+}

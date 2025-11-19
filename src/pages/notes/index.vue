@@ -17,13 +17,8 @@
               </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/notes/chordFormula">
-                Chord formulas
-              </RouterLink>
-            </li>
-            <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/notes/chordNameToFormula">
-                Chord Name to Formula
+              <RouterLink icon-btn to="/notes/openStringAudio">
+                Open String Audio Recognition
               </RouterLink>
             </li>
           </ul>
@@ -41,9 +36,10 @@
                 Missing Chord Notes
               </RouterLink>
             </li>
+
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/notes/intervalQuiz">
-                Interval Quiz
+              <RouterLink icon-btn to="/notes/notesAudio">
+                Note Recognition Audio
               </RouterLink>
             </li>
           </ul>
@@ -53,10 +49,14 @@
           Advanced:
           <ul class="list-disc pl-6 space-y-3">
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              Basic Major Chords Visual Test
+              <RouterLink icon-btn to="/notes/notesAudioHard">
+                Note Recognition Audio Hard
+              </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              Basic Minor Chords Visual Test
+              <RouterLink icon-btn to="/notes/intervalRecognizerAudio">
+                Interval Quiz Audio
+              </RouterLink>
             </li>
           </ul>
         </div>

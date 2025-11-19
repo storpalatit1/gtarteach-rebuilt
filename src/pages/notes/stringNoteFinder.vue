@@ -11,9 +11,10 @@ const stringTunings = ['E', 'A', 'D', 'G', 'B', 'E']
 const chosenNote = ref(null)
 const selectedFrets = ref([])
 const isCorrect = ref(null)
-
+const score = ref({ correct: 0, total: 0 })
 // Pick random note
 function chooseRandomNote() {
+  isCorrect.value = null
   chosenNote.value = noteNames[Math.floor(Math.random() * noteNames.length)]
 //   console.log('Chosen note:', chosenNote.value)
 }
@@ -65,31 +66,6 @@ function checkAnswer() {
   const correctPositions = getAllNotePositions(chosenNote.value)
   const normalizedSelected = (selectedFrets.value || []).map(normalizePos)
 
-  //   console.group(`🔎 Checking ${chosenNote.value}`);
-
-  //   console.log("🎯 Correct positions (0-based):");
-  //   correctPositions.forEach(p => {
-  //     console.log(
-  //       `   string ${p.string}, fret ${p.fret} → note ${getNoteName(p.string, p.fret)}`
-  //     );
-  //   });
-
-  //   console.log("🎸 User selected (raw + normalized):");
-  //   selectedFrets.value.forEach(p => {
-  //     console.log(
-  //       `   RAW string:${p.string}, fret:${p.fret} → ${getNoteName(p.string, p.fret)}`
-  //     );
-  //   });
-
-  //   normalizedSelected.forEach(p => {
-  //     console.log(
-  //       `   NORMALIZED string:${p.string}, fret:${p.fret} → ${getNoteName(p.string, p.fret)}`
-  //     );
-  //   });
-
-  //   console.groupEnd();
-
-  // compare sets normally
   const correctKeys = Array.from(new Set(correctPositions.map(toKey))).sort()
   const selectedKeys = Array.from(new Set(normalizedSelected.map(toKey))).sort()
 
@@ -99,9 +75,10 @@ function checkAnswer() {
 
   isCorrect.value = allCorrect
 
-//   console.log("✅ Expected keys:", correctKeys);
-//   console.log("🎯 Selected keys:", selectedKeys);
-//   console.log("Result:", isCorrect.value);
+  if (isCorrect.value === true) {
+    score.value.correct++
+  }
+  score.value.total++
 }
 onMounted(() => {
   chooseRandomNote()
@@ -109,44 +86,56 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
-    <div class="p-4">
-      <h1 v-if="chosenNote" class="mb-4 text-2xl font-bold">
-        Find all {{ chosenNote }}'s on the fretboard
-      </h1>
+  <main class="min-h-screen w-screen flex flex-col items-center p-4">
+    <h1 v-if="chosenNote" class="mb-4 text-center text-2xl font-bold">
+      Find all {{ chosenNote }}'s on the fretboard
+    </h1>
 
+    <!-- Fretboard + control buttons group -->
+    <div class="flex flex-col items-center gap-4">
       <InteractiveFretboard
         v-model="selectedFrets"
         :frets="13"
         multiple
       />
-    </div>
 
-    <div class="mt-4 space-x-4">
-      <button
-        class="border border-blue-400 rounded-md bg-blue-400 px-4 py-2 dark:border-gray-400 dark:bg-transparent"
-        @click="checkAnswer"
-      >
-        Confirm
-      </button>
+      <!-- BUTTONS stay close because they are inside this flex group -->
+      <div class="space-x-4">
+        <button
+          class="rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"
+          :disabled="isCorrect !== null"
+          @click="checkAnswer"
+        >
+          Confirm
+        </button>
 
-      <button
-        class="border border-blue-400 rounded-md bg-blue-400 px-4 py-2 dark:border-gray-400 dark:bg-transparent"
-        @click="selectedFrets = []"
-      >
-        Reset
-      </button>
-      <button
-        class="border border-blue-400 rounded-md bg-blue-400 px-4 py-2 dark:border-gray-400 dark:bg-transparent"
-        @click="selectedFrets = [], chooseRandomNote()"
-      >
-        Next
-      </button>
+        <button
+          class="border border-blue-400 rounded-md bg-blue-400 px-4 py-2 dark:border-white dark:bg-white dark:text-black"
+          :disabled="isCorrect !== null"
+          @click="selectedFrets = []"
+        >
+          Reset
+        </button>
+
+        <button
+          :class="{
+            'rounded-lg bg-blue-800 px-4 py-2 text-white dark:bg-gray-800 dark:text-gray disabled:opacity-100': isCorrect === null,
+            'rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300': isCorrect !== null,
+          }"
+          :disabled="isCorrect === null"
+          @click="selectedFrets = []; chooseRandomNote()"
+        >
+          Next
+        </button>
+      </div>
     </div>
 
     <div v-if="isCorrect !== null" class="mt-6 text-xl font-semibold">
       <span v-if="isCorrect" class="text-green-500">✅ Correct!</span>
       <span v-else class="text-red-500">❌ Try again.</span>
+    </div>
+    <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+      Score: correct {{ score.correct }} out of {{ score.total }}
     </div>
   </main>
 </template>

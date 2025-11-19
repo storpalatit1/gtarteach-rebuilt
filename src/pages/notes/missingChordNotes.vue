@@ -24,6 +24,7 @@ const feedback = ref('')
 const currentChordNotes = ref([''])
 const hiddenNote = ref('C')
 const visiblePositions = ref<Position[]>([])
+const score = ref({ correct: 0, total: 0 })
 const tuning = ['E', 'B', 'G', 'D', 'A', 'E'] // Standard tuning, string 1 = high E
 
 const notesSharp = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -69,6 +70,11 @@ function handleAnswer() {
   feedback.value = isCorrect
     ? '✅ Correct!'
     : `❌ Wrong! The correct note was: ${correct}`
+
+  if (isCorrect === true) {
+    score.value.correct++
+  }
+  score.value.total++
 }
 
 onMounted(() => {
@@ -84,29 +90,37 @@ onMounted(() => {
       </h2>
 
       <Fretboard :positions="visiblePositions" :start-fret="0" :end-fret="5" />
-      <div class="mx-auto mt-5 w-2/5 border-2 border-blue-300 rounded-lg p-2">
+      <div class="mx-auto mt-5 w-2/5 border-2 border-blue-300 rounded-lg p-2 dark:border-gray-200">
         <input
           v-model="userNotes"
           placeholder="Format: E" class="h-full w-full"
         >
       </div>
       <button
-        class="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        class="mr-2 mt-4 rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"
+        :disabled="feedback !== ''"
         @click="handleAnswer"
       >
         Submit
       </button>
 
+      <button
+        :class="{
+          'rounded-lg bg-blue-800 px-4 py-2 text-white dark:bg-gray-800 dark:text-gray disabled:opacity-100': feedback === '',
+          'rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300': feedback !== '',
+        }"
+        :disabled="feedback === ''"
+        @click="generateQuestion"
+      >
+        Next
+      </button>
       <p class="mt-4 font-semibold" :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'">
         {{ feedback }}
       </p>
 
-      <button
-        class="mt-1 rounded bg-gray-200 px-4 py-2 hover:bg-gray-300"
-        @click="generateQuestion"
-      >
-        Next Question
-      </button>
+      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        Score: correct {{ score.correct }} out of {{ score.total }}
+      </div>
     </div>
   </main>
 </template>

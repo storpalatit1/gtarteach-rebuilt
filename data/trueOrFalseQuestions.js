@@ -84,4 +84,93 @@ export default [
     question: 'The phrygian scale uses the pattern W-H-W-H-W-W-W',
     answer: false,
   },
+  {
+    id: 18,
+    question: 'A major chord is built from the 1st, 3rd, and 5th degrees of a major scale',
+    answer: true,
+  },
+  {
+    id: 19,
+    question: 'A power chord (e.g., 5-chord) contains four notes',
+    answer: false,
+  },
+  {
+    id: 20,
+    question: 'An open chord means the chord uses at least one unfretted (open) string',
+    answer: true,
+  },
+  {
+    id: 21,
+    question: 'A minor chord differs from a major chord by lowering the 5th.',
+    answer: false,
+  },
+  {
+    id: 22,
+    question: 'Barre chords use a finger to press down multiple strings at once.',
+    answer: true,
+  },
+  {
+    id: 22,
+    question: 'The standard guitar tuning from lowest (6th) to highest (1st) string is E D A B G E',
+    answer: false,
+  },
+  {
+    id: 23,
+    question: 'The standard guitar tuning from lowest (6th) to highest (1st) string is E A D G B E',
+    answer: true,
+  },
+
+  {
+    id: 24,
+    question: 'The drop D guitar tuning from lowest (6th) to highest (1st) string is D A D G B E',
+    answer: true,
+  },
+
+  {
+    id: 25,
+    question: 'The note one fret higher is always one semitone higher.',
+    answer: true,
+  },
+
+  {
+    id: 26,
+    question: 'The 13th fret on any string is one octave above the open string.',
+    answer: false,
+  },
+
+  {
+    id: 27,
+    question: 'The 12th fret on any string is one octave above the open string.',
+    answer: true,
+  },
+  {
+    id: 28,
+    question: 'Sharps raise a note by a whole step.',
+    answer: false,
+  },
+  {
+    id: 29,
+    question: 'Sharps raise a note by a half step.',
+    answer: true,
+  },
+  {
+    id: 30,
+    question: 'Modes are alternate tunings of the guitar.',
+    answer: true,
+  },
+  {
+    id: 31,
+    question: 'Vibrato changes the pitch of a note by repeatedly bending it slightly',
+    answer: true,
+  },
+  {
+    id: 32,
+    question: 'A metronome is used to change guitar tone.',
+    answer: false,
+  },
+  {
+    id: 33,
+    question: 'A capo lowers the pitch of open strings.',
+    answer: false,
+  },
 ]

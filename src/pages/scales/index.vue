@@ -22,13 +22,13 @@
               </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/chords/basicChordsVisual">
-                Basic Chords Visual Test
+              <RouterLink icon-btn to="/scales/chordFormula">
+                Chord formulas
               </RouterLink>
             </li>
             <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              <RouterLink icon-btn to="/chords/basicChordsAudio">
-                Basic Chords Listening Test
+              <RouterLink icon-btn to="/scales/chordNameToFormula">
+                Chord Name to Formula
               </RouterLink>
             </li>
           </ul>
@@ -61,9 +61,6 @@
               <RouterLink icon-btn to="/scales/IntervalWithinScaleAll">
                 Interval Within Scale, all modes
               </RouterLink>
-            </li>
-            <li class="border-1.5 border-blue-400 rounded-lg p-3 dark:border-2 dark:border-gray-100">
-              Basic Minor Chords Visual Test
             </li>
           </ul>
         </div>

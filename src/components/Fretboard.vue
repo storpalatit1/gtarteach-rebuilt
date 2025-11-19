@@ -39,30 +39,43 @@ const visibleFrets = Array.from(
     <div class="inline-block min-w-full">
       <div class="relative" style="padding-top: 40px">
         <!-- String names -->
-        <div
-          class="absolute left-0 top-0 flex flex-col"
-          :style="{
-            gap: `calc((100% - 40px) / 5)`,
-            height: 'calc(100% - 40px)',
-            transform: 'translateY(40px)',
-          }"
-        >
+        <!-- <div
+  class="absolute left-0 top-0 flex flex-col"
+  :style="{
+    left: '10px',   // move labels 10px right
+    gap: `calc((100% - 40px) / 5)`,
+    height: 'calc(100% - 40px)',
+    transform: 'translateY(40px)',
+  }"
+>
           <div
             v-for="(name, i) in stringNames"
             :key="i"
-            class="text-muted-foreground w-8 pr-2 text-right text-xs font-medium -mt-2"
+            class="text-muted-foreground w-8 pr-2 text-right text-xs font-medium -mt-2 "
           >
             {{ name }}
           </div>
-        </div>
+        </div> -->
 
         <!-- Fretboard -->
-        <div class="ml-10">
+        <div class="ml-15">
           <svg
-            :viewBox="`0 0 ${(visibleFrets.length + 1) * fretWidth} ${strings * 40}`"
-            class="w-full"
+            :viewBox="`-40 0 ${(visibleFrets.length + 1) * fretWidth + 40} ${strings * 40}`"
+            class="mx-auto block"
             :style="{ maxWidth: `${(visibleFrets.length + 1) * fretWidth}px` }"
           >
+
+            <!-- STRING NAMES (inside SVG) -->
+            <text
+              v-for="(name, i) in stringNames"
+              :key="`label-${i}`"
+              x="-20"
+              :y="(i * 40) + 40"
+              text-anchor="end"
+              class="fill-gray-800 text-xs dark:fill-gray-200"
+            >
+              {{ name }}
+            </text>
             <!-- Fret numbers -->
             <text
               v-for="fretIndex in visibleFrets"
@@ -70,8 +83,9 @@ const visibleFrets = Array.from(
               :x="(fretIndex - startFret) * fretWidth + 30"
               y="15"
               text-anchor="middle"
-              class="text-xs"
-              style="font-size: 12px; fill: var(--foreground-color, #1f2937)"
+              class="text-foreground text-xs"
+              fill="currentColor"
+              style="font-size: 12px"
             >
               {{ fretIndex }}
             </text>
@@ -127,7 +141,10 @@ const visibleFrets = Array.from(
                 y="12"
                 text-anchor="middle"
                 dominant-baseline="middle"
-                :fill="pos.isRoot ? '#ffffff' : 'black'"
+                fill="currentColor"
+                :class="pos.isRoot
+                  ? 'text-white dark:text-black'
+                  : 'text-black dark:text-white'"
                 class="font-bold"
                 style="font-size: 14px"
               >

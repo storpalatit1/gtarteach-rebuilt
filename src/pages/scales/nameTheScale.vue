@@ -65,7 +65,7 @@ const scalePositions = ref([])
 const currentScaleNotes = ref([])
 const userNotes = ref('')
 const feedback = ref('')
-
+const score = ref({ correct: 0, total: 0 })
 /* ------------------ Display Chromatic ------------------ */
 function getDisplayChromaticForKey(root) {
   return flatKeys.includes(root)
@@ -175,6 +175,11 @@ function handleAnswer() {
   feedback.value = isCorrect
     ? '✅ Correct!'
     : `❌ Wrong! The correct answer was: ${selectedRoot.value} ${selectedMode.value}`
+
+  if (isCorrect) {
+    score.value.correct++
+  }
+  score.value.total++
 }
 
 /* Init */
@@ -197,17 +202,21 @@ onMounted(() => {
         <input v-model="userNotes" placeholder="Format: C major" class="h-full w-full">
       </div>
 
-      <button class="mt-4 rounded bg-blue-500 px-4 py-2 text-white dark:bg-gray-300 hover:bg-blue-600 dark:text-black dark:hover:bg-gray-400" @click="handleAnswer">
+      <button :disabled="feedback !== ''" class="mr-2 mt-4 rounded bg-blue-500 px-4 py-2 text-white dark:bg-gray-300 hover:bg-blue-600 dark:text-black dark:hover:bg-gray-400" @click="handleAnswer">
         Submit
+      </button>
+
+      <button class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300" @click="generateQuestion">
+        Next
       </button>
 
       <p class="mt-4 font-semibold" :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'">
         {{ feedback }}
       </p>
-
-      <button class="mt-1 rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 dark:text-black" @click="generateQuestion">
-        Next Question
-      </button>
+      <div py-1 />
+      <div class="text-sm text-gray-600 dark:text-gray-300">
+        Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+      </div>
     </div>
   </main>
 </template>

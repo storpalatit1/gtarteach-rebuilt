@@ -13,7 +13,7 @@ const chords: Record<string, string[]> = {
 const chord = ref('')
 const userNotes = ref('')
 const feedback = ref('')
-
+const score = ref({ correct: 0, total: 0 })
 function generateQuestion() {
   const chordNames = Object.keys(chords)
   const randomChord = chordNames[Math.floor(Math.random() * chordNames.length)]
@@ -36,6 +36,11 @@ function handleAnswer() {
       && userEntered.every(note => correctSet.has(note))
 
   feedback.value = isCorrect ? '✅ Correct!' : `❌ Wrong! Correct notes: ${correctNotes.join(', ')}`
+
+  if (isCorrect === true) {
+    score.value.correct++
+  }
+  score.value.total++
 }
 
 onMounted(() => {
@@ -59,7 +64,8 @@ onMounted(() => {
       </div>
 
       <button
-        class="mt-4 rounded bg-blue-500 px-4 py-2 text-white dark:bg-gray-300 hover:bg-blue-600 dark:text-black dark:hover:bg-gray-400"
+        class="mt-4 rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"
+        :disabled="feedback !== ''"
         @click="handleAnswer"
       >
         Submit
@@ -70,11 +76,18 @@ onMounted(() => {
       </p>
 
       <button
-        class="mt-4 rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 dark:text-black"
+        :class="{
+          'rounded-lg bg-blue-800 px-4 py-2 text-white dark:bg-gray-800 dark:text-gray disabled:opacity-100': feedback === '',
+          'rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300': feedback !== '',
+        }"
+        :disabled="feedback === ''"
         @click="generateQuestion"
       >
-        Next Question
+        Next
       </button>
+      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        Score: correct {{ score.correct }} out of {{ score.total }}
+      </div>
     </div>
   </main>
 </template>
