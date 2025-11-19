@@ -32,7 +32,6 @@ declare module 'vue-router/auto-routes' {
     '/chords/basicMajorChordsVisual': RouteRecordInfo<'/chords/basicMajorChordsVisual', '/chords/basicMajorChordsVisual', Record<never, never>, Record<never, never>>,
     '/chords/basicMinorChordsVisual': RouteRecordInfo<'/chords/basicMinorChordsVisual', '/chords/basicMinorChordsVisual', Record<never, never>, Record<never, never>>,
     '/chords/basicSeventhChordsVisual': RouteRecordInfo<'/chords/basicSeventhChordsVisual', '/chords/basicSeventhChordsVisual', Record<never, never>, Record<never, never>>,
-    '/chords/listBasic': RouteRecordInfo<'/chords/listBasic', '/chords/listBasic', Record<never, never>, Record<never, never>>,
     '/chords/seventhChordsAudio': RouteRecordInfo<'/chords/seventhChordsAudio', '/chords/seventhChordsAudio', Record<never, never>, Record<never, never>>,
     '/chords/testAudio1': RouteRecordInfo<'/chords/testAudio1', '/chords/testAudio1', Record<never, never>, Record<never, never>>,
     '/chords/testGraphic1': RouteRecordInfo<'/chords/testGraphic1', '/chords/testGraphic1', Record<never, never>, Record<never, never>>,

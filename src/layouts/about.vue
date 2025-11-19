@@ -1,11 +1,9 @@
 <template>
-  <NavigationBar/>
-  
-  <div class="flex h-screen">
+  <NavigationBar />
 
-    <main class="w-full bg-gray-0 dark:bg-[#242424] p-4 overflow-y-auto">
+  <div class="h-screen flex">
+    <main class="bg-gray-0 w-full overflow-y-auto p-4 dark:bg-[#242424]">
       <RouterView />
     </main>
   </div>
 </template>
-

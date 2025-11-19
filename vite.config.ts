@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { env } from 'node:process'
 import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 import Shiki from '@shikijs/markdown-it'
 import { unheadVueComposablesImports } from '@unhead/vue'
@@ -17,16 +18,18 @@ import Layouts from 'vite-plugin-vue-layouts'
 import generateSitemap from 'vite-ssg-sitemap'
 import 'vitest/config'
 
-// ✅ Conditionally load vue-devtools only in development
+// Load devtools plugin only in development
 let VueDevTools
-if (process.env.NODE_ENV === 'development') {
-  try {
-    VueDevTools = require('vite-plugin-vue-devtools').default
-  } catch (e) {
-    console.warn('⚠️  vite-plugin-vue-devtools not loaded:', e.message)
-  }
-}
 
+if (env.NODE_ENV === 'development') {
+  import('vite-plugin-vue-devtools')
+    .then((mod) => {
+      VueDevTools = mod.default
+    })
+    .catch((e) => {
+      console.warn('⚠️  vite-plugin-vue-devtools not loaded:', e.message)
+    })
+}
 export default defineConfig({
   resolve: {
     alias: {
