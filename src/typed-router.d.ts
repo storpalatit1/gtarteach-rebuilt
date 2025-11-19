@@ -45,7 +45,6 @@ declare module 'vue-router/auto-routes' {
     '/notes/notesAudio': RouteRecordInfo<'/notes/notesAudio', '/notes/notesAudio', Record<never, never>, Record<never, never>>,
     '/notes/notesAudioHard': RouteRecordInfo<'/notes/notesAudioHard', '/notes/notesAudioHard', Record<never, never>, Record<never, never>>,
     '/notes/openStringAudio': RouteRecordInfo<'/notes/openStringAudio', '/notes/openStringAudio', Record<never, never>, Record<never, never>>,
-    '/notes/openStringTest': RouteRecordInfo<'/notes/openStringTest', '/notes/openStringTest', Record<never, never>, Record<never, never>>,
     '/notes/stringNoteFinder': RouteRecordInfo<'/notes/stringNoteFinder', '/notes/stringNoteFinder', Record<never, never>, Record<never, never>>,
     '/README': RouteRecordInfo<'/README', '/README', Record<never, never>, Record<never, never>>,
     '/scales/': RouteRecordInfo<'/scales/', '/scales', Record<never, never>, Record<never, never>>,
