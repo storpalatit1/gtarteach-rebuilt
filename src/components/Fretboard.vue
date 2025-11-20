@@ -58,11 +58,13 @@ const visibleFrets = Array.from(
         </div> -->
 
         <!-- Fretboard -->
-        <div class="ml-15">
+        <div class="w-full flex justify-center">
           <svg
             :viewBox="`-40 0 ${(visibleFrets.length + 1) * fretWidth + 40} ${strings * 40}`"
-            class="mx-auto block"
-            :style="{ maxWidth: `${(visibleFrets.length + 1) * fretWidth}px` }"
+            class="mx-auto block w-full"
+            :style="{
+              maxWidth: `${(visibleFrets.length + 1) * fretWidth}px`,
+            }"
           >
 
             <!-- STRING NAMES (inside SVG) -->

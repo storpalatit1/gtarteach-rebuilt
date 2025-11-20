@@ -19,7 +19,7 @@
       </div>
 
       <!-- Right side -->
-      <nav class="flex flex-wrap items-center gap-4 text-base">
+      <nav class="flex items-center justify-center gap-1.5">
         <RouterLink icon-btn to="/">
           Home
         </RouterLink>

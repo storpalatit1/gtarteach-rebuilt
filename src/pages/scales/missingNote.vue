@@ -175,9 +175,9 @@ const notes = uiRootChoices
       <!-- <div class="mt-4 text-sm text-gray-500">
       <p>Hidden Note: {{ hiddenNote }}</p>
     </div> -->
-
-      <div class="w-full flex items-center justify-center py-5 pr-0">
-        <div class="grid grid-cols-12 h-20 w-2/3 place-items-center gap-0.5 border-2 border-blue-400 rounded-lg p-1 dark:border-gray-100">
+      <div py-2 />
+      <div class="mb-6 w-full flex justify-center">
+        <div class="grid grid-cols-6 max-w-xl w-full place-items-center gap-1 border-2 border-blue-400 rounded-lg p-2 sm:grid-cols-12 dark:border-gray-100">
           <button
             v-for="note in notes"
             :key="note"

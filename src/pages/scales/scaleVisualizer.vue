@@ -215,21 +215,23 @@ const roots = uiRootChoices
 </script>
 
 <template>
-  <div class="py-5 pl-20">
-    <!-- Fretboard (your existing component) -->
-    <Fretboard
-      :positions="positions"
-      :start-fret="0"
-      :end-fret="12"
-      :show-notes="true"
-    />
+  <div class="px-4 py-5">
+    <!-- Fretboard -->
+    <div class="mb-6 w-full flex justify-center">
+      <Fretboard
+        :positions="positions"
+        :start-fret="0"
+        :end-fret="12"
+        :show-notes="true"
+      />
+    </div>
 
     <!-- String selector -->
-    <div class="flex justify-center gap-2 py-3 pr-40">
+    <div class="mb-6 flex flex-wrap justify-center gap-2">
       <button
         v-for="n in 6"
         :key="n"
-        class="border rounded px-3 py-1 hover:bg-blue-300 dark:hover:bg-gray-300"
+        class="border rounded px-3 py-1 text-sm hover:bg-blue-300 dark:hover:bg-gray-300"
         :class="selectedString === n ? 'bg-blue-400 text-white dark:bg-white dark:text-black' : ''"
         @click="chooseString(n)"
       >
@@ -237,7 +239,7 @@ const roots = uiRootChoices
       </button>
 
       <button
-        class="border rounded px-3 py-1 hover:bg-gray-300"
+        class="border rounded px-3 py-1 text-sm hover:bg-gray-300"
         @click="() => { selectedString = null; chooseString(null) }"
       >
         All Strings
@@ -245,12 +247,12 @@ const roots = uiRootChoices
     </div>
 
     <!-- Root selector -->
-    <div class="w-full flex items-center justify-center py-5 pr-40">
-      <div class="grid grid-cols-12 h-20 w-2/3 place-items-center gap-0.5 border-2 border-blue-400 rounded-lg p-1 dark:border-gray-100">
+    <div class="mb-6 w-full flex justify-center">
+      <div class="grid grid-cols-6 max-w-xl w-full place-items-center gap-1 border-2 border-blue-400 rounded-lg p-2 sm:grid-cols-12 dark:border-gray-100">
         <button
           v-for="root in roots"
           :key="root"
-          class="rounded px-2 py-1 hover:bg-blue-300 dark:hover:bg-gray-300"
+          class="rounded px-2 py-1 text-sm hover:bg-blue-300 dark:hover:bg-gray-300"
           :class="selectedRoot === root ? 'bg-blue-400 text-white dark:bg-white dark:text-black' : ''"
           @click="chooseScale(root)"
         >
@@ -259,14 +261,15 @@ const roots = uiRootChoices
       </div>
     </div>
 
-    <div py-2 />
-    <div class="w-full flex items-center justify-center pr-40">
-      <div class="grid grid-cols-9 h-20 w-full place-items-center gap-0.5 border-2 border-blue-400 rounded-lg p-1 dark:border-gray-100">
+    <!-- Mode selector -->
+    <div class="w-full flex justify-center">
+      <div class="grid grid-cols-2 max-w-3xl w-full place-items-center gap-1 border-2 border-blue-400 rounded-lg p-2 lg:grid-cols-9 md:grid-cols-5 sm:grid-cols-3 dark:border-gray-100">
         <button
           v-for="mode in modes"
           :key="mode"
-          class="rounded px-2 py-1 hover:bg-blue-300 dark:hover:bg-gray-300"
-          :class="selectedMode === mode ? 'bg-blue-400 text-white dark:bg-white dark:text-black' : ''" @click="chooseMode(mode)"
+          class="rounded px-2 py-1 text-center text-sm hover:bg-blue-300 dark:hover:bg-gray-300"
+          :class="selectedMode === mode ? 'bg-blue-400 text-white dark:bg-white dark:text-black' : ''"
+          @click="chooseMode(mode)"
         >
           {{ mode }}
         </button>
