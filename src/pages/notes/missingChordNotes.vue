@@ -118,8 +118,8 @@ onMounted(() => {
         {{ feedback }}
       </p>
 
-      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-        Score: correct {{ score.correct }} out of {{ score.total }}
+      <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+        Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
     </div>
   </main>

@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 
 const selectedChord = ref('')
 const selectedChordFormula = ref([''])
-const selectedAnswer = ref(false)
+const selectedAnswer = ref(null)
 const chordTypes
 = [
   { name: 'Major', formula: ['1', '3', '5'] },
@@ -16,12 +16,14 @@ const chordTypes
   { name: 'Augmented', formula: ['1', '3', '#5'] },
 ]
 const score = ref({ correct: 0, total: 0 })
-
+const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
+const displayedChords = ref([])
 function generateQuestion() {
+  selectedAnswer.value = null
   const randomChordIndex = Math.floor(Math.random() * chordTypes.length)
   const randomChordFormula = chordTypes[randomChordIndex].formula
   const randomChord = chordTypes[randomChordIndex].name
-
+  displayedChords.value = shuffle(chordTypes)
   selectedChordFormula.value = randomChordFormula
   selectedChord.value = randomChord
   // console.log(randomChord,randomChordFormula);
@@ -47,18 +49,18 @@ onMounted(() => {
   <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
       <div py-2 />
-      <div class="border-1.5 border-blue-400 rounded-lg dark:border-gray-100">
+      <div>
         <h4 class="mb-3 text-lg font-semibold">
           What chord is this?
         </h4>
         {{ selectedChordFormula.join(' - ') }}
         <div class="grid grid-cols-2 gap-3">
           <button
-            v-for="option in chordTypes"
+            v-for="option in displayedChords"
             :key="option.name"
             class="w-full border-1.25 border-blue-400 rounded-lg px-2 py-1 transition dark:border-gray-100"
             :class="{
-              'bg-green-500 text-white': selectedAnswer === option.name && option.name === selectedChord,
+              'bg-green-500 text-white': (selectedAnswer === option.name && option.name === selectedChord) || (selectedAnswer !== option.name && option.name === selectedChord) && selectedAnswer !== null,
               'bg-red-500 text-white': selectedAnswer === option.name && option.name !== selectedChord,
               'hover:bg-gray-100 dark:hover:bg-gray-800': !selectedAnswer,
             }"
@@ -79,8 +81,8 @@ onMounted(() => {
           </button>
         </div>
 
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Score: correct {{ score.correct }} out of {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
       </div>
     </div>

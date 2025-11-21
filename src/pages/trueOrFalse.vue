@@ -40,7 +40,7 @@ onMounted(() => {
 <template>
   <main class="mx-auto max-w-4xl p-4 text-center">
     <div class="p-4 sm:p-8">
-      <div class="border border-blue-400 rounded-lg p-4 dark:border-gray-100">
+      <div class="p-4">
         <!-- QUESTION -->
         <h4 class="mb-3 text-lg font-semibold">
           {{ currentQuestion?.question }}
@@ -87,8 +87,8 @@ onMounted(() => {
         </div>
 
         <!-- SCORE -->
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Score: correct {{ score.correct }} out of {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
       </div>
     </div>

@@ -152,16 +152,12 @@ function handleNext() {
       <span>Note Recognizer</span>
     </div>
 
-    <div class="max-w-md w-full border rounded-xl p-6">
+    <div class="max-w-md w-full p-6">
       <div v-if="!isLoaded" class="mb-3 text-sm text-gray-500">
         ⏳ Loading sounds... please wait
       </div>
 
       <template v-else>
-        <h4 class="mb-3 text-lg font-semibold">
-          What note is this?
-        </h4>
-
         <div class="mb-3 flex justify-center">
           <button
             class="border border-blue-400 rounded-md bg-blue-400 px-4 py-2 dark:border-gray-400 dark:bg-transparent"
@@ -182,6 +178,7 @@ function handleNext() {
         </div>
 
         <!-- Fret selection -->
+        Fretboard note selection range:
         <div class="mx-auto w-1/2 border border-blue-400 rounded-lg py-2 dark:border-white">
           <input v-model.number="startFret" type="number" min="0" max="12" class="w-16 text-center">
           <input v-model.number="endFret" type="number" min="0" max="12" class="w-16 text-center">
@@ -210,8 +207,8 @@ function handleNext() {
           Reroll
         </button>
 
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
 
         <div v-if="selectedAnswer" class="mt-3">

@@ -3,7 +3,7 @@
     <header class="flex flex-wrap items-center justify-between px-4 py-3">
       <!-- Left side -->
       <div class="flex items-center gap-2 text-xl font-semibold">
-        <span>Gtarteech-Rebuilt</span>
+        <span>Gtarteach-Rebuilt</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"

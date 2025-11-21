@@ -57,7 +57,7 @@ onMounted(() => {
       </h1>
       <Fretboard :positions="currentChord.positions" :start-fret="0" :end-fret="5" />
       <div py-2 />
-      <div class="border-1.5 border-blue-400 rounded-lg dark:border-gray-100">
+      <div>
         <h4 class="mb-3 text-lg font-semibold">
           What chord is this?
         </h4>
@@ -68,7 +68,7 @@ onMounted(() => {
             :key="option"
             class="w-full border-1.25 border-blue-400 rounded-lg px-2 py-1 transition dark:border-gray-100"
             :class="{
-              'bg-green-500 text-white': selectedAnswer === option && option === currentChord.name,
+              'bg-green-500 text-white': (selectedAnswer === option && option === currentChord.name) || (selectedAnswer !== option && option === currentChord.name) && selectedAnswer !== null,
               'bg-red-500 text-white': selectedAnswer === option && option !== currentChord.name,
               'hover:bg-gray-100 dark:hover:bg-gray-800': !selectedAnswer,
             }"
@@ -88,9 +88,8 @@ onMounted(() => {
             Next
           </button>
         </div>
-
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Score: correct {{ score.correct }} out of {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
       </div>
     </div>

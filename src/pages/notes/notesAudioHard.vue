@@ -174,6 +174,7 @@ function handleNext() {
         </div>
 
         <!-- Input -->
+
         <div class="my-3 w-full border border-blue-400 rounded-md px-2 py-2 dark:border-white">
           <input
             v-model="userNote"
@@ -199,10 +200,9 @@ function handleNext() {
         </button>
 
         <!-- Score -->
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
-
         <!-- Result + Next -->
         <div v-if="selectedAnswer" class="mt-3">
           <p class="text-sm">

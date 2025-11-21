@@ -126,7 +126,7 @@ function handleNext() {
       Open Chord Recognition Test
     </h1>
 
-    <div class="max-w-md w-full border rounded-xl p-6">
+    <div class="max-w-md w-full p-6">
       <div v-if="!isLoaded" class="mb-3 text-sm text-gray-500">
         ⏳ Loading sounds... please wait
       </div>
@@ -161,7 +161,7 @@ function handleNext() {
             :key="option"
             class="border border-blue-400 rounded-lg px-2 py-2 transition dark:border-gray-300"
             :class="{
-              'bg-green-500 text-white': selectedAnswer === option && option === currentChord?.name,
+              'bg-green-500 text-white': (selectedAnswer === option && option === currentChord?.name) || (selectedAnswer !== option && option === currentChord?.name) && selectedAnswer !== null,
               'bg-red-500 text-white': selectedAnswer === option && option !== currentChord?.name,
               'hover:bg-gray-100 dark:hover:bg-gray-800': !selectedAnswer,
             }"
@@ -172,8 +172,8 @@ function handleNext() {
           </button>
         </div>
 
-        <div class="text-sm text-gray-600 dark:text-gray-300">
-          Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
 
         <div v-if="selectedAnswer" class="mt-3">

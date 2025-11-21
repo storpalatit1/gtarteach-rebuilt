@@ -130,12 +130,12 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="isCorrect !== null" class="mt-6 text-xl font-semibold">
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
+    </div>
+    <div v-if="isCorrect !== null" class="mt-2 text-xl font-semibold">
       <span v-if="isCorrect" class="text-green-500">✅ Correct!</span>
       <span v-else class="text-red-500">❌ Try again.</span>
-    </div>
-    <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-      Score: correct {{ score.correct }} out of {{ score.total }}
     </div>
   </main>
 </template>

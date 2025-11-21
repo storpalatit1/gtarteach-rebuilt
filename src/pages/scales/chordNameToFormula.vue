@@ -18,7 +18,8 @@ const chordTypes
   { name: 'Augmented', formula: ['1', '3', '#5'] },
 ]
 const score = ref({ correct: 0, total: 0 })
-
+const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
+const displayedFormulas = ref([])
 function generateQuestion() {
   const randomRoot = canonicalChromatic[Math.floor(Math.random() * canonicalChromatic.length)]
   const randomChordIndex = Math.floor(Math.random() * chordTypes.length)
@@ -28,6 +29,7 @@ function generateQuestion() {
   selectedRoot.value = randomRoot
   selectedChordFormula.value = randomChordFormula
   selectedChord.value = randomChord
+  displayedFormulas.value = shuffle(chordTypes)
   // console.log(randomChord,randomChordFormula);
 }
 function handleAnswer(answer) {
@@ -51,13 +53,13 @@ onMounted(() => {
   <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
       <div py-2 />
-      <div class="border-1.5 border-blue-400 rounded-lg dark:border-gray-100">
+      <div>
         <h4 class="mb-3 text-lg font-semibold">
           What is the formula for the {{ selectedRoot }} {{ selectedChord }}?
         </h4>
         <div class="grid grid-cols-2 gap-3">
           <button
-            v-for="option in chordTypes"
+            v-for="option in displayedFormulas"
             :key="option.name"
             class="w-full border-1.25 border-blue-400 rounded-lg px-2 py-1 transition dark:border-gray-100"
             :class="{
@@ -82,8 +84,8 @@ onMounted(() => {
           </button>
         </div>
 
-        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Score: correct {{ score.correct }} out of {{ score.total }}
+        <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+          Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
       </div>
     </div>

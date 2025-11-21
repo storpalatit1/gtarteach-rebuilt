@@ -197,8 +197,8 @@ onMounted(() => {
       <p v-if="feedback !== ''" class="mt-4 font-semibold" :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'">
         {{ feedback }}
       </p>
-      <div class="text-sm text-gray-600 dark:text-gray-300">
-        Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+      <div class="mt-2 py-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+        Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
     </div>
   </main>

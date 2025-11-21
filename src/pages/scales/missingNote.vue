@@ -184,8 +184,8 @@ const notes = uiRootChoices
             class="rounded px-2 py-1 transition-all duration-200"
             :class="{
 
+              'bg-green-500 text-white': answered && (note === hiddenNote && note !== selectedAnswer),
               'bg-green-500 text-white': answered && note === hiddenNote,
-
               'bg-red-500 text-white': answered && note === selectedAnswer && note !== hiddenNote,
 
               'hover:bg-blue-300 dark:hover:bg-gray-300': !answered,
@@ -206,8 +206,8 @@ const notes = uiRootChoices
         </button>
       </div>
       <div py-2 />
-      <div class="text-sm text-gray-600 dark:text-gray-300">
-        Score: <strong>{{ score.correct }}</strong> / {{ score.total }}
+      <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+        Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
     </div>
   </main>

@@ -11,33 +11,46 @@ const chords: Record<string, string[]> = {
 }
 
 const chord = ref('')
-const userNotes = ref('')
+const userNote1 = ref('')
+const userNote2 = ref('')
+const userNote3 = ref('')
 const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
+
 function generateQuestion() {
   const chordNames = Object.keys(chords)
   const randomChord = chordNames[Math.floor(Math.random() * chordNames.length)]
   chord.value = randomChord
   feedback.value = ''
-  userNotes.value = ''
+  userNote1.value = ''
+  userNote2.value = ''
+  userNote3.value = ''
 }
 
 function handleAnswer() {
   const correctNotes = chords[chord.value]
-  const userEntered = userNotes.value
-    .split(',')
-    .map(n => n.trim().toUpperCase()) // normalize
+
+  const combinedInput
+    = `${userNote1.value}, ${userNote2.value}, ${userNote3.value}`
+
+  const userEntered = combinedInput
+    .split(/[, ]+/)
+    .map(n => n.trim().toUpperCase())
     .filter(Boolean)
 
   const correctSet = new Set(correctNotes.map(n => n.toUpperCase()))
+  const userSet = new Set(userEntered)
 
+  // ✔ Correct only when all notes match exactly (no duplicates, any order)
   const isCorrect
-    = userEntered.length === correctNotes.length
-      && userEntered.every(note => correctSet.has(note))
+    = userSet.size === correctSet.size
+      && [...userSet].every(note => correctSet.has(note))
 
-  feedback.value = isCorrect ? '✅ Correct!' : `❌ Wrong! Correct notes: ${correctNotes.join(', ')}`
+  feedback.value = isCorrect
+    ? '✅ Correct!'
+    : `❌ Wrong! Correct notes: ${correctNotes.join(', ')}`
 
-  if (isCorrect === true) {
+  if (isCorrect) {
     score.value.correct++
   }
   score.value.total++
@@ -55,11 +68,18 @@ onMounted(() => {
         What notes make the chord: {{ chord }}?
       </h2>
 
-      <div class="mx-auto w-3/5 border-2 border-blue-400 rounded-lg p-2 dark:border-gray-200">
+      <div class="grid grid-cols-3 mx-auto w-2/5 gap-1 border-2 border-blue-400 rounded-lg p-2 dark:border-gray-200">
         <input
-          v-model="userNotes"
-          placeholder="Format: E,F#,G"
-          class="w-full text-center outline-none"
+          v-model="userNote1"
+          class="max-length-1 w-full border-b-2 text-center outline-none"
+        >
+        <input
+          v-model="userNote2"
+          class="max-length-1 w-full border-b-2 text-center outline-none"
+        >
+        <input
+          v-model="userNote3"
+          class="max-length-1 w-full border-b-2 text-center outline-none"
         >
       </div>
 
@@ -85,8 +105,8 @@ onMounted(() => {
       >
         Next
       </button>
-      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-        Score: correct {{ score.correct }} out of {{ score.total }}
+      <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+        Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
     </div>
   </main>
