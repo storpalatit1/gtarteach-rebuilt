@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { currentUser } from '../lib/useUser'
+
 defineOptions({
   name: 'IndexPage',
 })
@@ -12,8 +14,19 @@ useHead({
 
 <template>
   <main class="mx-auto max-w-4xl p-4 text-center space-y-6">
+    <div v-if="currentUser">
+      <h1 class="text-4xl font-bold">
+        Welcome {{ currentUser.email.split("@")[0] }}!
+      </h1>
+      Head to profile
+      <div py-1 />
+      <RouterLink to="/profile" class="mx-auto rounded-md bg-blue-500 pb-1 pl-5 pr-5 pt-1 dark:bg-gray-200 dark:text-black">
+        Profile
+      </RouterLink>
+    </div>
+
     <!-- Title -->
-    <h1 class="text-4xl font-bold">
+    <h1 class="text-3xl font-bold">
       Master Your Guitar Fundamentals
     </h1>
 

@@ -42,16 +42,22 @@ const scalePositions = ref([])
 const currentScaleNotes = ref([])
 const hiddenNote = ref('C')
 const selectedAnswer = ref(null)
+const isCorrect = ref(null)
 const answered = ref(false) // ✅ new: track if user has answered
 const score = ref({ correct: 0, total: 0 })
+const goTo = ref(false)
 function getScaleNotes(rootNote, mode = 'major') {
   let intervals
   switch (mode) {
     case 'major':
+      intervals = majorScaleInterval
+      break
     case 'ionian (major)':
       intervals = majorScaleInterval
       break
     case 'minor':
+      intervals = minorScaleInterval
+      break
     case 'aeolian (minor)':
       intervals = minorScaleInterval
       break
@@ -117,6 +123,7 @@ function getScalePositions(scaleNotesDisplay) {
 }
 
 function generateQuestion() {
+  isCorrect.value = null
   const randomNote = canonicalChromatic[Math.floor(Math.random() * canonicalChromatic.length)]
   const randomMode = modes[Math.floor(Math.random() * modes.length)]
 
@@ -152,16 +159,30 @@ function handleAnswer(note) {
   answered.value = true
   if (note === hiddenNote.value) {
     score.value.correct++
+    isCorrect.value = true
+  }
+  else {
+    isCorrect.value = false
   }
   score.value.total++
 }
 
 const notes = uiRootChoices
+
+function goToNext() {
+  goTo.value = false
+  generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
+}
 </script>
 
 <template>
   <div py-1 />
-  <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
+  <main v-if="goTo === false" class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
       <h2 class="mb-2 text-xl font-semibold">
         {{ chosenScale }}
@@ -200,7 +221,7 @@ const notes = uiRootChoices
       <div class="mt-2 flex justify-center">
         <button
           class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
-          @click="generateQuestion"
+          @click="handleNext"
         >
           Next
         </button>
@@ -209,6 +230,22 @@ const notes = uiRootChoices
       <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
         Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Intermediate" :is-correct="isCorrect" />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

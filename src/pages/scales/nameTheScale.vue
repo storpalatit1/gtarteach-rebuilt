@@ -66,6 +66,8 @@ const currentScaleNotes = ref([])
 const userNotes = ref('')
 const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
+const goTo = ref(false)
+const isCorrect = ref(null)
 /* ------------------ Display Chromatic ------------------ */
 function getDisplayChromaticForKey(root) {
   return flatKeys.includes(root)
@@ -150,6 +152,7 @@ function chooseScale(root) {
 
 /* ------------------ Quiz Generator ------------------ */
 function generateQuestion() {
+  isCorrect.value = null
   const mode = modes[Math.floor(Math.random() * modes.length)]
   const root = canonicalChromatic[Math.floor(Math.random() * canonicalChromatic.length)]
 
@@ -170,18 +173,26 @@ function handleAnswer() {
   const correctRoot = selectedRoot.value.toLowerCase()
   const correctMode = normalizeMode(selectedMode.value)
 
-  const isCorrect = root === correctRoot && mode === correctMode
+  isCorrect.value = root === correctRoot && mode === correctMode
 
-  feedback.value = isCorrect
+  feedback.value = isCorrect.value
     ? '✅ Correct!'
     : `❌ Wrong! The correct answer was: ${selectedRoot.value} ${selectedMode.value}`
 
-  if (isCorrect) {
+  if (isCorrect.value) {
     score.value.correct++
   }
   score.value.total++
 }
+function goToNext() {
+  goTo.value = false
+  generateQuestion()
+}
 
+// Go to next question
+function handleNext() {
+  goTo.value = true
+}
 /* Init */
 onMounted(() => {
   chooseScale('G')
@@ -190,7 +201,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="h-screen flex flex-col items-center justify-center text-center">
+  <main v-if="goTo === false" class="h-screen flex flex-col items-center justify-center text-center">
     <div class="max-w-lg w-full p-4">
       <h2 class="mb-1 text-xl">
         What scale is this?
@@ -206,7 +217,7 @@ onMounted(() => {
         Submit
       </button>
 
-      <button class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300" @click="generateQuestion">
+      <button class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300" @click="handleNext">
         Next
       </button>
 
@@ -217,6 +228,22 @@ onMounted(() => {
       <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
         Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Intermediate" :is-correct="isCorrect" />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

@@ -1,3 +1,15 @@
+<script setup>
+import { useRouter } from 'vue-router'
+import { supabase } from '../lib/supabase'
+import { currentUser } from '../lib/useUser'
+
+const router = useRouter()
+async function logout() {
+  await supabase.auth.signOut()
+  router.replace('/')
+}
+</script>
+
 <template>
   <div class="bg-gray-0 text-gray-0 h-full w-full overflow-y-auto p-4 dark:bg-[#000]">
     <header class="flex flex-wrap items-center justify-between px-4 py-3">
@@ -35,7 +47,19 @@
         <RouterLink icon-btn to="/fretboard">
           Fretboard
         </RouterLink>
-
+        <div v-if="!currentUser">
+          <RouterLink icon-btn to="/Signup" class="mr-1">
+            Signup
+          </RouterLink>
+          <RouterLink icon-btn to="/Login">
+            Login
+          </RouterLink>
+        </div>
+        <div v-else>
+          <button @click="logout">
+            Log Out
+          </button>
+        </div>
         <button icon-btn title="toggle dark" @click="toggleDark()">
           <div i="carbon-sun dark:carbon-moon" />
         </button>

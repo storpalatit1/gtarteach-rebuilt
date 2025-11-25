@@ -18,6 +18,7 @@ const chordTypes
 const score = ref({ correct: 0, total: 0 })
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
 const displayedChords = ref([])
+const goTo = ref(false)
 function generateQuestion() {
   selectedAnswer.value = null
   const randomChordIndex = Math.floor(Math.random() * chordTypes.length)
@@ -36,9 +37,15 @@ function handleAnswer(answer) {
     total: score.value.total + 1,
   }
 }
-function handleNext() {
+function goToNext() {
   selectedAnswer.value = false
+  goTo.value = false
   generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 onMounted(() => {
   generateQuestion()
@@ -46,7 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
+  <main v-if="goTo === false" class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div class="p-4">
       <div py-2 />
       <div>
@@ -85,6 +92,23 @@ onMounted(() => {
           Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
       </div>
+    </div>
+  </main>
+
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Beginner" :is-correct="selectedAnswer === selectedChord " />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

@@ -39,7 +39,7 @@ const score = ref({ correct: 0, total: 0 })
 
 const startFret = ref(0)
 const endFret = ref(12)
-
+const goTo = ref(false)
 const userNote = ref('')
 const correct = ref<boolean | null>(null)
 
@@ -132,13 +132,19 @@ watch(endFret, () => {
   generateQuestion()
 })
 
-function handleNext() {
+function goToNext() {
+  goTo.value = false
   generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 </script>
 
 <template>
-  <main class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
+  <main v-if="goTo === false" class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
     <div class="flex items-center gap-2 text-xl font-semibold">
       <svg
         xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -194,7 +200,7 @@ function handleNext() {
 
         <button
           class="mr-1 rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"
-          :disabled="correct !== null"
+          :disabled="userNote.length === 0 || correct !== null"
           @click="handleAnswer"
         >
           Submit
@@ -226,6 +232,22 @@ function handleNext() {
           </button>
         </div>
       </template>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Intermediate" :is-correct="userNote === currentNoteRoot" />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

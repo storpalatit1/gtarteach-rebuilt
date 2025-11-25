@@ -12,6 +12,7 @@ const chosenNote = ref(null)
 const selectedFrets = ref([])
 const isCorrect = ref(null)
 const score = ref({ correct: 0, total: 0 })
+const goTo = ref(false)
 // Pick random note
 function chooseRandomNote() {
   isCorrect.value = null
@@ -80,13 +81,26 @@ function checkAnswer() {
   }
   score.value.total++
 }
+
+function goToNext() {
+  selectedFrets.value = []
+  chooseRandomNote()
+  goTo.value = false
+  generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
+}
+
 onMounted(() => {
   chooseRandomNote()
 })
 </script>
 
 <template>
-  <main class="min-h-screen w-screen flex flex-col items-center p-4">
+  <main v-if="goTo === false" class="min-h-screen w-screen flex flex-col items-center p-4">
     <h1 v-if="chosenNote" class="mb-4 text-center text-2xl font-bold">
       Find all {{ chosenNote }}'s on the fretboard
     </h1>
@@ -123,7 +137,7 @@ onMounted(() => {
             'rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300': isCorrect !== null,
           }"
           :disabled="isCorrect === null"
-          @click="selectedFrets = []; chooseRandomNote()"
+          @click="handleNext"
         >
           Next
         </button>
@@ -136,6 +150,22 @@ onMounted(() => {
     <div v-if="isCorrect !== null" class="mt-2 text-xl font-semibold">
       <span v-if="isCorrect" class="text-green-500">✅ Correct!</span>
       <span v-else class="text-red-500">❌ Try again.</span>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Beginner" :is-correct="isCorrect" />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

@@ -38,6 +38,7 @@ declare module 'vue-router/auto-routes' {
     '/Fretboard': RouteRecordInfo<'/Fretboard', '/Fretboard', Record<never, never>, Record<never, never>>,
     '/fretboardOld': RouteRecordInfo<'/fretboardOld', '/fretboardOld', Record<never, never>, Record<never, never>>,
     '/hi/[name]': RouteRecordInfo<'/hi/[name]', '/hi/:name', { name: ParamValue<true> }, { name: ParamValue<false> }>,
+    '/Login': RouteRecordInfo<'/Login', '/Login', Record<never, never>, Record<never, never>>,
     '/notes/': RouteRecordInfo<'/notes/', '/notes', Record<never, never>, Record<never, never>>,
     '/notes/chordNotes': RouteRecordInfo<'/notes/chordNotes', '/notes/chordNotes', Record<never, never>, Record<never, never>>,
     '/notes/intervalRecognizerAudio': RouteRecordInfo<'/notes/intervalRecognizerAudio', '/notes/intervalRecognizerAudio', Record<never, never>, Record<never, never>>,
@@ -46,6 +47,7 @@ declare module 'vue-router/auto-routes' {
     '/notes/notesAudioHard': RouteRecordInfo<'/notes/notesAudioHard', '/notes/notesAudioHard', Record<never, never>, Record<never, never>>,
     '/notes/openStringAudio': RouteRecordInfo<'/notes/openStringAudio', '/notes/openStringAudio', Record<never, never>, Record<never, never>>,
     '/notes/stringNoteFinder': RouteRecordInfo<'/notes/stringNoteFinder', '/notes/stringNoteFinder', Record<never, never>, Record<never, never>>,
+    '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
     '/README': RouteRecordInfo<'/README', '/README', Record<never, never>, Record<never, never>>,
     '/scales/': RouteRecordInfo<'/scales/', '/scales', Record<never, never>, Record<never, never>>,
     '/scales/chordFormula': RouteRecordInfo<'/scales/chordFormula', '/scales/chordFormula', Record<never, never>, Record<never, never>>,
@@ -56,6 +58,7 @@ declare module 'vue-router/auto-routes' {
     '/scales/nameTheScale': RouteRecordInfo<'/scales/nameTheScale', '/scales/nameTheScale', Record<never, never>, Record<never, never>>,
     '/scales/scaleInterval': RouteRecordInfo<'/scales/scaleInterval', '/scales/scaleInterval', Record<never, never>, Record<never, never>>,
     '/scales/scaleVisualizer': RouteRecordInfo<'/scales/scaleVisualizer', '/scales/scaleVisualizer', Record<never, never>, Record<never, never>>,
+    '/Signup': RouteRecordInfo<'/Signup', '/Signup', Record<never, never>, Record<never, never>>,
     '/trueOrFalse': RouteRecordInfo<'/trueOrFalse', '/trueOrFalse', Record<never, never>, Record<never, never>>,
   }
 }

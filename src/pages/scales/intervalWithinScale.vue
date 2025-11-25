@@ -39,6 +39,8 @@ const chosenInterval = ref(1)
 const userInterval = ref('')
 const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
+const goTo = ref(false)
+const isCorrect = ref(null)
 function addSemitones(note, semitones) {
   const index = notes.indexOf(note)
   return notes[(index + semitones) % notes.length]
@@ -60,6 +62,7 @@ function generateMinorScale(root) {
 }
 
 function generateQuestion() {
+  isCorrect.value = null
   feedback.value = ''
   const randomRoot = notes[Math.floor(Math.random() * notes.length)]
   const randomMode = modes[Math.floor(Math.random() * modes.length)]
@@ -83,20 +86,26 @@ function handleAnswer() {
   const answer = userInterval.value.trim()
   const correctNote = chosenScale.value[chosenInterval.value]?.note
 
-  const isCorrect = answer.toUpperCase() === correctNote.toUpperCase()
+  isCorrect.value = answer.toUpperCase() === correctNote.toUpperCase()
 
   score.value = {
-    correct: score.value.correct + (isCorrect ? 1 : 0),
+    correct: score.value.correct + (isCorrect.value ? 1 : 0),
     total: score.value.total + 1,
   }
 
-  feedback.value = isCorrect
+  feedback.value = isCorrect.value
     ? 'Correct!'
     : `Incorrect — correct answer: ${correctNote}`
 }
 
-function handleNext() {
+function goToNext() {
+  goTo.value = false
   generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 onMounted(() => {
   generateQuestion()
@@ -104,7 +113,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="h-screen flex flex-col items-center justify-center text-center">
+  <main v-if="goTo === false" class="h-screen flex flex-col items-center justify-center text-center">
     <div class="max-w-lg w-full p-4">
       <h2 class="mb-4 text-xl">
         What is the {{ chosenInterval }} interval of the {{ chosenRoot }} {{ chosenMode }} scale?
@@ -138,6 +147,22 @@ onMounted(() => {
       <div class="mt-2 py-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
         Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Intermediate" :is-correct="isCorrect" />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

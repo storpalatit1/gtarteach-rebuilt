@@ -35,6 +35,7 @@
         <RouterLink icon-btn to="/fretboard">
           Fretboard
         </RouterLink>
+
         <button icon-btn title="toggle dark" @click="toggleDark()">
           <div i="carbon-sun dark:carbon-moon" />
         </button>

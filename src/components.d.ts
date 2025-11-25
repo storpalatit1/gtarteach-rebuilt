@@ -8,18 +8,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AudioPlayer: typeof import('./components/AudioPlayer.vue')['default']
     Correct: typeof import('./components/Correct.vue')['default']
     Fretboard: typeof import('./components/Fretboard.vue')['default']
     FretboardInteractive: typeof import('./components/FretboardInteractive.vue')['default']
-    NavigationBar: typeof import('./components/NavigationBar.vue')['default']
+    Progression: typeof import('./components/Progression.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']
-    TestWindow: typeof import('./components/TestWindow.vue')['default']
     TheCounter: typeof import('./components/TheCounter.vue')['default']
-    TheFooter: typeof import('./components/TheFooter.vue')['default']
     TheInput: typeof import('./components/TheInput.vue')['default']
   }
 }

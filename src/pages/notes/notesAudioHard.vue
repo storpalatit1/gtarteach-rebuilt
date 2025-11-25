@@ -47,7 +47,7 @@ const noteNames = [
 const currentNote = ref<string | null>(null)
 const selectedAnswer = ref<string | null>(null)
 const correct = ref<boolean | null>(null)
-
+const goTo = ref(false)
 const score = ref({ correct: 0, total: 0 })
 const startFret = 0
 const endFret = 12
@@ -118,13 +118,19 @@ function handleAnswer() {
   }
 }
 
-function handleNext() {
+function goToNext() {
+  goTo.value = false
   generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 </script>
 
 <template>
-  <main class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
+  <main v-if="goTo === false" class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
     <!-- Header -->
     <div class="flex items-center gap-2 text-xl font-semibold">
       <svg
@@ -219,6 +225,22 @@ function handleNext() {
           </button>
         </div>
       </template>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Advanced" :is-correct="userNote === currentNote " />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

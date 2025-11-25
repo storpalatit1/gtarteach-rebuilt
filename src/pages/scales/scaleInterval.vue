@@ -30,7 +30,10 @@ const selectedAnswer = ref(null)
 const score = ref({ correct: 0, total: 0 })
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
 const displayedModes = ref([])
+const goTo = ref(false)
+const isCorrect = ref(null)
 function generateQuestion() {
+  isCorrect.value = null
   const correct = modes[Math.floor(Math.random() * modes.length)]
   correctMode.value = correct
 
@@ -74,16 +77,25 @@ function handleAnswer(answer) {
   const correctAliases = modeAliases[correctMode.value] || []
 
   if (correctAliases.includes(answer)) {
-    // console.log("correct");
+    isCorrect.value = true
     score.value.correct++
+  }
+  else {
+    isCorrect.value = false
   }
 
   score.value.total++
 }
 
-function handleNext() {
+function goToNext() {
   selectedAnswer.value = null
+  goTo.value = false
   generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 
 onMounted(() => {
@@ -93,7 +105,7 @@ onMounted(() => {
 
 <template>
   <div py-4 />
-  <main class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
+  <main v-if="goTo === false" class="mx-auto h-screen max-w-4xl items-center justify-between text-center">
     <div>
       <h4 class="mb-3 text-lg font-semibold">
         What mode is this?
@@ -135,6 +147,22 @@ onMounted(() => {
       <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
         Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div py-2 />
+    <Progression difficulty="Beginner" :is-correct="isCorrect" />
+    <div class="mt-4">
+      <button
+        class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+        @click="goToNext"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      Score: {{ score.correct }} correct out of {{ score.total }}
     </div>
   </main>
 </template>

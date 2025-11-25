@@ -33,6 +33,8 @@ const options = ref<string[]>([])
 const selectedAnswer = ref<string | null>(null)
 const quizMode = ref<'melodic' | 'harmonic'>('melodic') // melodic = play once
 const score = ref({ correct: 0, total: 0 })
+const goTo = ref(false)
+const isCorrect = ref<boolean | null>(null)
 
 // --------------------------------------------------------------------
 // 🔊 Audio Playback
@@ -56,6 +58,7 @@ async function playAudio(notes: string[]) {
 // 🎯 Generate Question
 // --------------------------------------------------------------------
 function generateQuestion() {
+  isCorrect.value = null
   const note = notes[Math.floor(Math.random() * notes.length)]
 
   currentNote.value = note
@@ -73,21 +76,27 @@ function generateQuestion() {
 // --------------------------------------------------------------------
 function handleAnswer(answer: string) {
   selectedAnswer.value = answer
-  const isCorrect = answer === currentNote.value
+  isCorrect.value = answer === currentNote.value
 
   score.value = {
-    correct: score.value.correct + (isCorrect ? 1 : 0),
+    correct: score.value.correct + (isCorrect.value ? 1 : 0),
     total: score.value.total + 1,
   }
 }
 
-function handleNext() {
+function goToNext() {
+  goTo.value = false
   generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 </script>
 
 <template>
-  <main class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
+  <main v-if="goTo === false" class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
     <div class="flex items-center gap-2 text-xl font-semibold">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -171,6 +180,26 @@ function handleNext() {
           </button>
         </div>
       </template>
+    </div>
+  </main>
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div class="max-w-xl w-full">
+      <Progression
+        difficulty="Beginner"
+        :is-correct="isCorrect"
+      />
+      <div class="mt-4">
+        <button
+          class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+          @click="goToNext"
+        >
+          Next
+        </button>
+      </div>
+
+      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        Score: {{ score.correct }} correct out of {{ score.total }}
+      </div>
     </div>
   </main>
 </template>

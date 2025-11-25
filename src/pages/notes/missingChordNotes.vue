@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { concat } from 'lodash'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import majorChords from '~/../data/majorchords.js'
 import minorchords from '~/../data/minorchords.js'
 import seventhchords from '~/../data/seventhchords.js'
 import Fretboard from '~/components/Fretboard.vue'
 
 interface Position {
-  string: number // this tells TS it's a number
+  string: number
   fret: number
 }
 
@@ -16,65 +15,87 @@ interface Chord {
   name: string
   positions: Position[]
 }
-const chords = concat(majorChords, minorchords, seventhchords) as Chord[]
-const currentChord = ref(chords[0])
-const chord = ref('')
-const userNotes = ref('')
-const feedback = ref('')
-const currentChordNotes = ref([''])
-const hiddenNote = ref('C')
-const visiblePositions = ref<Position[]>([])
-const score = ref({ correct: 0, total: 0 })
-const tuning = ['E', 'B', 'G', 'D', 'A', 'E'] // Standard tuning, string 1 = high E
 
+// All chords combined
+const chords = [...majorChords, ...minorchords, ...seventhchords] as Chord[]
+
+// State
+const currentChord = ref<Chord | null>(null)
+const hiddenNote = ref<string | null>(null)
+const visiblePositions = ref<Position[]>([])
+const userNote = ref('')
+const feedback = ref('')
+const score = ref({ correct: 0, total: 0 })
+const isCorrect = ref<boolean | null>(null)
+const goTo = ref(false)
+// Standard tuning, string 1 = high E
+const tuning = ['E', 'B', 'G', 'D', 'A', 'E']
 const notesSharp = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-function noteFromStringFret(stringNumber: number, fret: number) {
-  // tuning[0] should be string 1 (high E), tuning[1] string 2 (B), etc.
-  const openNote = tuning[stringNumber - 1]
+// Shown in text: chord name
+const chordName = computed(() => currentChord.value?.name ?? '')
 
+// Shown in Progression as the correct answer
+const correctNoteString = computed(() => hiddenNote.value ?? '')
+
+// Map string+fret to a note name
+function noteFromStringFret(stringNumber: number, fret: number): string {
+  const openNote = tuning[stringNumber - 1] // string 1 = tuning[0]
   const openIndex = notesSharp.indexOf(openNote)
   return notesSharp[(openIndex + fret) % 12]
 }
+
+// Generate a new question
 function generateQuestion() {
+  if (!chords.length)
+    return
+
+  isCorrect.value = null
+  feedback.value = ''
+  userNote.value = ''
+
   const randomChord = chords[Math.floor(Math.random() * chords.length)]
   currentChord.value = randomChord
-  chord.value = randomChord.name
 
   const notes = randomChord.positions.map(pos =>
     noteFromStringFret(pos.string, pos.fret),
   )
 
-  // Step 1: choose which POSITION to hide
-  const randomIndex = Math.floor(Math.random() * randomChord.positions.length)
+  // Pick one position to hide
+  const hiddenIndex = Math.floor(Math.random() * randomChord.positions.length)
 
-  // Step 2: hide THAT position
-  visiblePositions.value = randomChord.positions.filter((_, i) => i !== randomIndex)
-
-  // Step 3: define hidden note from THAT SAME position
-  hiddenNote.value = notes[randomIndex]
-
-  // Save the full notes for debugging if needed
-  currentChordNotes.value = notes
-
-  userNotes.value = ''
-  feedback.value = ''
+  hiddenNote.value = notes[hiddenIndex]
+  visiblePositions.value = randomChord.positions.filter((_, i) => i !== hiddenIndex)
 }
 
+// Handle user submit
 function handleAnswer() {
-  const userAnswer = userNotes.value.trim().toUpperCase()
+  if (!hiddenNote.value)
+    return
+
+  const userAnswer = userNote.value.trim().toUpperCase()
   const correct = hiddenNote.value.toUpperCase()
 
-  const isCorrect = userAnswer === correct
+  isCorrect.value = userAnswer === correct
 
-  feedback.value = isCorrect
+  feedback.value = isCorrect.value
     ? '✅ Correct!'
     : `❌ Wrong! The correct note was: ${correct}`
 
-  if (isCorrect === true) {
+  if (isCorrect.value) {
     score.value.correct++
   }
   score.value.total++
+}
+
+function goToNext() {
+  goTo.value = false
+  generateQuestion()
+}
+
+// Go to next question
+function handleNext() {
+  goTo.value = true
 }
 
 onMounted(() => {
@@ -83,42 +104,76 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="h-screen flex flex-col items-center justify-center text-center">
+  <!-- Quiz view -->
+  <main
+    v-if="goTo === false"
+    class="h-screen flex flex-col items-center justify-center text-center"
+  >
     <div class="max-w-lg w-full p-4">
       <h2 class="mb-1 text-xl">
-        What is the missing note of {{ chord }}?
+        What is the missing note of {{ chordName }}?
       </h2>
 
-      <Fretboard :positions="visiblePositions" :start-fret="0" :end-fret="5" />
-      <div class="mx-auto mt-5 w-2/5 border-2 border-blue-300 rounded-lg p-2 dark:border-gray-200">
+      <Fretboard
+        :positions="visiblePositions"
+        :start-fret="0"
+        :end-fret="5"
+      />
+
+      <div
+        class="mx-auto mt-5 w-2/5 border-2 border-blue-300 rounded-lg p-2 dark:border-gray-200"
+      >
         <input
-          v-model="userNotes"
-          placeholder="Format: E" class="h-full w-full"
+          v-model="userNote"
+          placeholder="Format: E"
+          class="h-full w-full text-center outline-none"
         >
       </div>
+
       <button
         class="mr-2 mt-4 rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"
-        :disabled="feedback !== ''"
         @click="handleAnswer"
       >
         Submit
       </button>
-
       <button
-        :class="{
-          'rounded-lg bg-blue-800 px-4 py-2 text-white dark:bg-gray-800 dark:text-gray disabled:opacity-100': feedback === '',
-          'rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300': feedback !== '',
-        }"
-        :disabled="feedback === ''"
-        @click="generateQuestion"
+        class="rounded-lg bg-blue-800 px-4 py-2 text-white dark:bg-gray-800 dark:text-gray disabled:opacity-100"
+        @click="handleNext"
       >
         Next
       </button>
-      <p class="mt-4 font-semibold" :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'">
+      <p
+        v-if="feedback"
+        class="mt-4 font-semibold"
+        :class="feedback.includes('Correct') ? 'text-green-500' : 'text-red-500'"
+      >
         {{ feedback }}
       </p>
 
-      <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
+      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        Score: {{ score.correct }} correct out of {{ score.total }}
+      </div>
+    </div>
+  </main>
+
+  <!-- Progression / XP view -->
+  <main v-else class="h-screen flex flex-col items-center justify-center text-center">
+    <div class="max-w-xl w-full">
+      <Progression
+        difficulty="Intermediate"
+        :is-correct="isCorrect"
+        :correct-answer="correctNoteString"
+      />
+      <div class="mt-4">
+        <button
+          class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"
+          @click="goToNext"
+        >
+          Next
+        </button>
+      </div>
+
+      <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
         Score: {{ score.correct }} correct out of {{ score.total }}
       </div>
     </div>
