@@ -177,7 +177,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="currentUser">
+  <div v-if="currentUser" class="mx-auto max-w-2xl w-full text-center">
     <h1 v-if="props.isCorrect === true" class="text-2xl text-green">
       Correct!
     </h1>
@@ -190,7 +190,8 @@ onMounted(() => {
     <h1>Level {{ userLvl }}</h1>
 
     <!-- XP Bar -->
-    <div class="mx-auto" style="width: 500px">
+    <!-- XP Bar -->
+    <div class="mx-auto max-w-3xl w-[95%]">
       <div class="h-4 rounded bg-gray-300">
         <div
           class="h-4 rounded bg-blue-500 transition-all duration-300"

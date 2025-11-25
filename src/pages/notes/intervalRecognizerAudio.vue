@@ -228,7 +228,7 @@ function handleNext() {
   </main>
   <main v-else class="h-screen flex flex-col items-center justify-center text-center">
     <div py-2 />
-    <Progression difficulty="Advanced" :is-correct :correct-answer="correctIntervalString" />
+    <Progression difficulty="Advanced" :is-correct="isCorrect" :correct-answer="correctIntervalString" />
     <div class="mt-4">
       <button
         class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"

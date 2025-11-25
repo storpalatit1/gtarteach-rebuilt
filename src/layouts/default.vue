@@ -12,9 +12,8 @@ async function logout() {
 
 <template>
   <div class="bg-gray-0 text-gray-0 h-full w-full overflow-y-auto p-4 dark:bg-[#000]">
-    <header class="flex flex-wrap items-center justify-between px-4 py-3">
-      <!-- Left side -->
-      <div class="flex items-center gap-2 text-xl font-semibold">
+    <header class="flex flex-wrap items-center justify-between px-4 py-3 sm:flex-nowrap">
+      <div class="flex items-center gap-2 whitespace-nowrap text-xl font-semibold">
         <span>Gtarteach-Rebuilt</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +29,7 @@ async function logout() {
         </svg>
       </div>
 
-      <!-- Right side -->
-      <nav class="flex items-center justify-center gap-1.5">
+      <nav class="w-full flex flex-wrap items-center justify-center gap-2 sm:flex-nowrap sm:justify-end">
         <RouterLink icon-btn to="/">
           Home
         </RouterLink>
@@ -47,19 +45,36 @@ async function logout() {
         <RouterLink icon-btn to="/fretboard">
           Fretboard
         </RouterLink>
-        <div v-if="!currentUser">
-          <RouterLink icon-btn to="/Signup" class="mr-1">
-            Signup
-          </RouterLink>
-          <RouterLink icon-btn to="/Login">
-            Login
-          </RouterLink>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <template v-if="!currentUser">
+            <RouterLink
+              icon-btn
+              to="/Signup"
+              class="rounded-md px-3 py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
+            >
+              Signup
+            </RouterLink>
+
+            <RouterLink
+              icon-btn
+              to="/Login"
+              class="rounded-md px-3 py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
+            >
+              Login
+            </RouterLink>
+          </template>
+
+          <template v-else>
+            <button
+              class="rounded-md px-3 py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
+              @click="logout"
+            >
+              Log Out
+            </button>
+          </template>
         </div>
-        <div v-else>
-          <button @click="logout">
-            Log Out
-          </button>
-        </div>
+
         <button icon-btn title="toggle dark" @click="toggleDark()">
           <div i="carbon-sun dark:carbon-moon" />
         </button>

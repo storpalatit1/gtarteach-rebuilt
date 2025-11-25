@@ -36,7 +36,7 @@ async function handleSignup() {
     </h1>
 
     <!-- Centered bordered container -->
-    <div class="mx-auto w-1/2 p-6 text-left space-y-4">
+    <div class="mx-auto max-w-md w-full p-6 text-left space-y-4">
       <div class="text-black dark:text-white">
         Email: (has to be confirmed after signing up)<br>
         <input v-model="email" class="w-full border rounded p-2" placeholder="email">
