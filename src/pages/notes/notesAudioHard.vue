@@ -2,9 +2,6 @@
 import * as Tone from 'tone'
 import { ref } from 'vue'
 
-// --------------------------------------------------------------------
-// 🎵 Sampler
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -23,9 +20,6 @@ Tone.loaded().then(() => {
   generateQuestion()
 })
 
-// --------------------------------------------------------------------
-// 🎵 Quiz Data
-// --------------------------------------------------------------------
 const stringOpenNotes = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4']
 const strings = 6
 
@@ -54,9 +48,6 @@ const endFret = 12
 
 const userNote = ref('')
 
-// --------------------------------------------------------------------
-// 🔊 Audio
-// --------------------------------------------------------------------
 async function playAudio(notes: string[]) {
   if (!isLoaded.value)
     return
@@ -65,9 +56,6 @@ async function playAudio(notes: string[]) {
   sampler.triggerAttackRelease(notes[0], '2n')
 }
 
-// --------------------------------------------------------------------
-// 🎵 Guitar Note Calculation
-// --------------------------------------------------------------------
 function getNoteName(stringIndex: number, fretIndex: number): string {
   // stringIndex is 1–6, so map to 0–5
   const openNote = stringOpenNotes[stringIndex - 1]
@@ -88,9 +76,6 @@ function getNoteName(stringIndex: number, fretIndex: number): string {
   return `${noteNames[semitone]}${octave}`
 }
 
-// --------------------------------------------------------------------
-// 🎯 New Question
-// --------------------------------------------------------------------
 function generateQuestion() {
   correct.value = null
 
@@ -103,9 +88,6 @@ function generateQuestion() {
   userNote.value = ''
 }
 
-// --------------------------------------------------------------------
-// 📝 Answer Handler
-// --------------------------------------------------------------------
 function handleAnswer() {
   selectedAnswer.value = userNote.value.trim()
 
@@ -123,7 +105,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -131,7 +112,6 @@ function handleNext() {
 
 <template>
   <main v-if="goTo === false" class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center">
-    <!-- Header -->
     <div class="flex items-center gap-2 text-xl font-semibold">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +128,6 @@ function handleNext() {
       <span>Note Recognizer</span>
     </div>
 
-    <!-- Main Card -->
     <div class="max-w-md w-full border rounded-xl p-6">
       <div v-if="!isLoaded" class="mb-3 text-sm text-gray-500">
         ⏳ Loading sounds... please wait
@@ -159,7 +138,6 @@ function handleNext() {
           What note is this?
         </h4>
 
-        <!-- Play Button -->
         <div class="mb-3 flex justify-center">
           <button
             class="border border-blue-400 rounded-md bg-blue-400 px-4 py-2 dark:border-gray-400 dark:bg-transparent"
@@ -179,8 +157,6 @@ function handleNext() {
           </button>
         </div>
 
-        <!-- Input -->
-
         <div class="my-3 w-full border border-blue-400 rounded-md px-2 py-2 dark:border-white">
           <input
             v-model="userNote"
@@ -189,7 +165,6 @@ function handleNext() {
           >
         </div>
 
-        <!-- Buttons -->
         <button
           class="mr-1 rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"
           :disabled="correct !== null"
@@ -205,11 +180,10 @@ function handleNext() {
           Reroll
         </button>
 
-        <!-- Score -->
         <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
           Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
-        <!-- Result + Next -->
+
         <div v-if="selectedAnswer" class="mt-3">
           <p class="text-sm">
             <strong v-if="correct" class="text-green-500">Correct</strong>
@@ -229,7 +203,7 @@ function handleNext() {
   </main>
   <main v-else class="h-screen flex flex-col items-center justify-center text-center">
     <div py-2 />
-    <Progression difficulty="Advanced" :is-correct="userNote === currentNote " />
+    <Progression difficulty="Advanced" :is-correct="selectedAnswer === currentNote " />
     <div class="mt-4">
       <button
         class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-100 dark:hover:bg-gray-300"

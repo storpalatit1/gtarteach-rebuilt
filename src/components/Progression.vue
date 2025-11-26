@@ -36,7 +36,6 @@ async function getStats() {
 }
 
 function xpForLevel(level) {
-  // XP required to advance from lvl → lvl+1
   return 100 + (level - 1) * 150 + level * level * 20
 }
 
@@ -54,7 +53,7 @@ function calculateStreakReward(stats) {
 
   // Streak multiplier formula
   const multiplier = stats.current_streak > 0
-    ? 1 + stats.current_streak * 0.5 // +50% per streak
+    ? 1 + stats.current_streak * 0.5
     : 1
 
   const totalXP = Math.floor(baseXP * multiplier)
@@ -77,7 +76,6 @@ function applyLevelProgression(stats, earnedXP) {
   let newLevel = stats.lvl
   let newXP = stats.xp + earnedXP
 
-  // Level up as long as XP exceeds threshold
   while (newXP >= xpForLevel(newLevel)) {
     newXP -= xpForLevel(newLevel)
     newLevel++
@@ -104,7 +102,6 @@ async function incrementCorrect() {
       })
       .eq('user_id', currentUser.value.id)
 
-    // Display values
     displayNewXP.value = earnedXP
     displayXP.value = newXP
     userLvl.value = newLevel
@@ -189,8 +186,6 @@ onMounted(() => {
 
     <h1>Level {{ userLvl }}</h1>
 
-    <!-- XP Bar -->
-    <!-- XP Bar -->
     <div class="mx-auto max-w-3xl w-[95%]">
       <div class="h-4 rounded bg-gray-300">
         <div

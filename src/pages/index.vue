@@ -25,20 +25,16 @@ useHead({
       </RouterLink>
     </div>
 
-    <!-- Title -->
     <h1 class="text-3xl font-bold">
       Master Your Guitar Fundamentals
     </h1>
 
-    <!-- Subtitle -->
     <p class="mx-auto max-w-2xl text-lg opacity-80">
       Build your essential skills. A solid foundation for chord recognition,
       note identification, and fretboard mastery.
     </p>
 
-    <!-- Category Grid -->
     <div class="grid grid-cols-1 w-full gap-4 sm:grid-cols-2">
-      <!-- CATEGORY CARD -->
       <RouterLink
         to="/chords"
         class="category flex items-center gap-4 border-2 border-blue-400 rounded-xl p-4 text-left transition-all dark:border-gray-100 hover:underline"
@@ -61,7 +57,6 @@ useHead({
         </span>
       </RouterLink>
 
-      <!-- NOTES -->
       <RouterLink
         to="/notes"
         class="category flex items-center gap-4 border-2 border-blue-400 rounded-xl p-4 text-left transition-all dark:border-gray-100 hover:underline"
@@ -84,7 +79,6 @@ useHead({
         </span>
       </RouterLink>
 
-      <!-- SCALES -->
       <RouterLink
         to="/scales"
         class="category flex items-center gap-4 border-2 border-blue-400 rounded-xl p-4 text-left transition-all dark:border-gray-100 hover:underline"
@@ -107,7 +101,6 @@ useHead({
         </span>
       </RouterLink>
 
-      <!-- FRETBOARD -->
       <RouterLink
         to="/fretboard"
         class="category flex items-center gap-4 border-2 border-blue-400 rounded-xl p-4 text-left transition-all dark:border-gray-100 hover:underline"

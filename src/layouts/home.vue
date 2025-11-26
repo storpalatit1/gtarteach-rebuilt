@@ -1,7 +1,6 @@
 <template>
   <div class="bg-gray-0 text-gray-0 h-full w-full overflow-y-auto p-4 dark:bg-[#000]">
     <header class="flex flex-wrap items-center justify-between px-4 py-3">
-      <!-- Left side -->
       <div class="flex items-center gap-2 text-xl font-semibold">
         <span>Gtarteach-Rebuilt</span>
         <svg
@@ -18,7 +17,6 @@
         </svg>
       </div>
 
-      <!-- Right side -->
       <nav class="flex items-center justify-center gap-1.5">
         <RouterLink icon-btn to="/">
           Home

@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-// import AudioPlayer from '../src/components/AudioPlayer.vue'
 
 const props = defineProps({
   modifiers: {
@@ -14,7 +13,6 @@ const emit = defineEmits(['notePressed'])
 const playerRef = ref()
 
 function playNote(note) {
-  // The src could come from your data (e.g., `/sounds/${chord}.mp3`)
   if (note.name.length === 2 && Number.isNaN(note.name[1])) {
     playerRef.value.initAudio(`../../../public/notes/${note.gString}/${note.name[0]}s.mp3`)
   }

@@ -16,10 +16,8 @@ interface Chord {
   positions: Position[]
 }
 
-// All chords combined
 const chords = [...majorChords, ...minorchords, ...seventhchords] as Chord[]
 
-// State
 const currentChord = ref<Chord | null>(null)
 const hiddenNote = ref<string | null>(null)
 const visiblePositions = ref<Position[]>([])
@@ -28,24 +26,19 @@ const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
 const isCorrect = ref<boolean | null>(null)
 const goTo = ref(false)
-// Standard tuning, string 1 = high E
 const tuning = ['E', 'B', 'G', 'D', 'A', 'E']
 const notesSharp = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-// Shown in text: chord name
 const chordName = computed(() => currentChord.value?.name ?? '')
 
-// Shown in Progression as the correct answer
 const correctNoteString = computed(() => hiddenNote.value ?? '')
 
-// Map string+fret to a note name
 function noteFromStringFret(stringNumber: number, fret: number): string {
   const openNote = tuning[stringNumber - 1] // string 1 = tuning[0]
   const openIndex = notesSharp.indexOf(openNote)
   return notesSharp[(openIndex + fret) % 12]
 }
 
-// Generate a new question
 function generateQuestion() {
   if (!chords.length)
     return
@@ -61,14 +54,12 @@ function generateQuestion() {
     noteFromStringFret(pos.string, pos.fret),
   )
 
-  // Pick one position to hide
   const hiddenIndex = Math.floor(Math.random() * randomChord.positions.length)
 
   hiddenNote.value = notes[hiddenIndex]
   visiblePositions.value = randomChord.positions.filter((_, i) => i !== hiddenIndex)
 }
 
-// Handle user submit
 function handleAnswer() {
   if (!hiddenNote.value)
     return
@@ -93,7 +84,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -104,7 +94,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- Quiz view -->
   <main
     v-if="goTo === false"
     class="h-screen flex flex-col items-center justify-center text-center"
@@ -156,7 +145,6 @@ onMounted(() => {
     </div>
   </main>
 
-  <!-- Progression / XP view -->
   <main v-else class="h-screen flex flex-col items-center justify-center text-center">
     <div class="max-w-xl w-full">
       <Progression

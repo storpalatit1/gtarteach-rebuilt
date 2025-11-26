@@ -47,7 +47,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }

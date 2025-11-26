@@ -43,7 +43,7 @@ const currentScaleNotes = ref([])
 const hiddenNote = ref('C')
 const selectedAnswer = ref(null)
 const isCorrect = ref(null)
-const answered = ref(false) // ✅ new: track if user has answered
+const answered = ref(false)
 const score = ref({ correct: 0, total: 0 })
 const goTo = ref(false)
 function getScaleNotes(rootNote, mode = 'major') {
@@ -154,7 +154,7 @@ onMounted(() => {
 
 function handleAnswer(note) {
   if (answered.value)
-    return // prevent multiple guesses
+    return
   selectedAnswer.value = note
   answered.value = true
   if (note === hiddenNote.value) {
@@ -174,7 +174,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }

@@ -2,9 +2,6 @@
 import * as Tone from 'tone'
 import { ref } from 'vue'
 
-// --------------------------------------------------------------------
-// 🎵 Tone.js setup — Sampler with Salamander piano samples
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -23,9 +20,6 @@ Tone.loaded().then(() => {
   generateQuestion()
 })
 
-// --------------------------------------------------------------------
-// 🎼 Interval Data
-// --------------------------------------------------------------------
 const intervals = [
   { name: 'Minor 2nd', semitones: 1 },
   { name: 'Major 2nd', semitones: 2 },
@@ -41,12 +35,8 @@ const intervals = [
   { name: 'Octave', semitones: 12 },
 ]
 
-// starting note pool
 const notePool = ['A2', 'C3', 'D#3', 'F#3']
 
-// --------------------------------------------------------------------
-// 🧠 App State
-// --------------------------------------------------------------------
 const currentInterval = ref<{ name: string, semitones: number, notes: string[] } | null>(null)
 const options = ref<string[]>([])
 const selectedAnswer = ref<string | null>(null)
@@ -54,12 +44,11 @@ const quizMode = ref<'melodic' | 'harmonic'>('melodic')
 const score = ref({ correct: 0, total: 0 })
 const isCorrect = ref<boolean | null>(null)
 const goTo = ref(false)
-// computed version of the correct notes
+
 const correctIntervalString = computed(() => {
   return currentInterval.value?.name || ''
 })
 
-// Utility
 const shuffle = (arr: any[]) => [...arr].sort(() => Math.random() - 0.5)
 
 function getRandomInterval() {
@@ -123,7 +112,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -153,7 +141,6 @@ function handleNext() {
       </div>
 
       <template v-else>
-        <!-- Mode Selector -->
         <div class="mb-4">
           <label class="mr-2 font-semibold">Mode:</label>
           <select v-model="quizMode" class="border rounded px-2 py-1">

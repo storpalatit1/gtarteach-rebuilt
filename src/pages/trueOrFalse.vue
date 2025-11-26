@@ -2,12 +2,11 @@
 import { onMounted, ref } from 'vue'
 import questions from '~/../data/trueOrFalseQuestions.js'
 
-// State
 const currentQuestion = ref(null)
-const selectedAnswer = ref(null) // null = unanswered
+const selectedAnswer = ref(null)
 const score = ref({ correct: 0, total: 0 })
 const goTo = ref(false)
-// Load a random question
+
 function generateQuestion() {
   const randomIndex = Math.floor(Math.random() * questions.length)
   currentQuestion.value = questions[randomIndex]
@@ -15,7 +14,6 @@ function generateQuestion() {
   // console.log(currentQuestion.value.answer)
 }
 
-// Handle answer click
 function handleAnswer(answer) {
   selectedAnswer.value = answer
 
@@ -31,7 +29,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -44,12 +41,10 @@ onMounted(() => {
   <main v-if="goTo === false" class="h-screen flex flex-col items-center justify-center text-center">
     <div class="p-4 sm:p-8">
       <div class="p-4">
-        <!-- QUESTION -->
         <h4 class="mb-3 text-lg font-semibold">
           {{ currentQuestion?.question }}
         </h4>
 
-        <!-- TRUE / FALSE BUTTONS -->
         <div class="grid grid-cols-2 gap-3">
           <button
             class="w-full border border-blue-400 rounded-lg px-4 py-3 transition dark:border-gray-100"
@@ -78,7 +73,6 @@ onMounted(() => {
           </button>
         </div>
 
-        <!-- NEXT BUTTON -->
         <div class="mt-4">
           <button
             class="rounded-lg bg-blue-400 px-4 py-2 text-white dark:bg-gray-600 hover:bg-blue-600 disabled:opacity-50 dark:hover:bg-gray-300"
@@ -89,7 +83,6 @@ onMounted(() => {
           </button>
         </div>
 
-        <!-- SCORE -->
         <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
           Score: {{ score.correct }} correct out of {{ score.total }}
         </div>

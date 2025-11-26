@@ -6,9 +6,9 @@ import minorchords from '~/../data/minorchords.js'
 import seventhChords from '~/../data/seventhchords.js'
 import Fretboard from '~/components/Fretboard.vue'
 import Progression from '~/components/Progression.vue'
-// import {incrementCorrect, incrementStreak, wrongAnswer} from "../../lib/incrementStats.js"
+
 const chords = majorChords.concat(minorchords, seventhChords, diminishedChords)
-// Reactive state
+
 const currentChord = ref(chords[0])
 const options = ref([])
 const selectedAnswer = ref(null)
@@ -17,7 +17,6 @@ const isCorrect = ref(null)
 const goTo = ref(false)
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
 
-// Generate a new question
 function generateQuestion() {
   isCorrect.value = null
   const correctChord = chords[Math.floor(Math.random() * chords.length)]
@@ -30,7 +29,6 @@ function generateQuestion() {
   selectedAnswer.value = null
 }
 
-// Handle user’s answer
 function handleAnswer(answer) {
   selectedAnswer.value = answer
   isCorrect.value = answer === currentChord.value.name
@@ -55,12 +53,10 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
 
-// Initialize on mount
 onMounted(() => {
   generateQuestion()
 })

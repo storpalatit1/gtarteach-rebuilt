@@ -37,7 +37,6 @@
           </ul>
         </div>
 
-        <!-- Intermediate -->
         <div class="w-full space-y-3">
           <div class="flex items-center gap-2 font-bold">
             <div class="h-8 w-1 rounded-full bg-blue" />
@@ -68,7 +67,6 @@
           </ul>
         </div>
 
-        <!-- Advanced -->
         <div class="w-full space-y-3">
           <div class="flex items-center gap-2 font-bold">
             <div class="h-8 w-1 rounded-full bg-red" />

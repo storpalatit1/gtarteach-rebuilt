@@ -27,7 +27,6 @@ function generateQuestion() {
   displayedChords.value = shuffle(chordTypes)
   selectedChordFormula.value = randomChordFormula
   selectedChord.value = randomChord
-  // console.log(randomChord,randomChordFormula);
 }
 function handleAnswer(answer) {
   selectedAnswer.value = answer
@@ -43,7 +42,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }

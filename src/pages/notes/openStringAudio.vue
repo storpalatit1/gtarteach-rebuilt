@@ -2,9 +2,6 @@
 import * as Tone from 'tone'
 import { ref } from 'vue'
 
-// --------------------------------------------------------------------
-// 🎵 Tone.js Sampler — Salamander Piano
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -23,40 +20,30 @@ Tone.loaded().then(() => {
   generateQuestion()
 })
 
-// --------------------------------------------------------------------
-// 🎵 Note Recognition Quiz
-// --------------------------------------------------------------------
-// const notePool = ['A2', 'C3', 'D#3', 'F#3']
 const notes = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4']
 const currentNote = ref<string | null>(null)
 const options = ref<string[]>([])
 const selectedAnswer = ref<string | null>(null)
-const quizMode = ref<'melodic' | 'harmonic'>('melodic') // melodic = play once
+const quizMode = ref<'melodic' | 'harmonic'>('melodic')
 const score = ref({ correct: 0, total: 0 })
 const goTo = ref(false)
 const isCorrect = ref<boolean | null>(null)
 
-// --------------------------------------------------------------------
-// 🔊 Audio Playback
-// --------------------------------------------------------------------
 async function playAudio(notes: string[]) {
   if (!isLoaded.value)
     return
   await Tone.start()
 
   if (quizMode.value === 'harmonic') {
-    // play simultaneously
+    // harmonic
     sampler.triggerAttackRelease(notes, '2n')
   }
   else {
-    // melodic (single note)
+    // melodic
     sampler.triggerAttackRelease(notes[0], '2n')
   }
 }
 
-// --------------------------------------------------------------------
-// 🎯 Generate Question
-// --------------------------------------------------------------------
 function generateQuestion() {
   isCorrect.value = null
   const note = notes[Math.floor(Math.random() * notes.length)]
@@ -64,16 +51,12 @@ function generateQuestion() {
   currentNote.value = note
   selectedAnswer.value = null
 
-  // Create random multiple-choice options
   const shuffled = [...notes].sort(() => Math.random() - 0.5)
   options.value = shuffled
 
   playAudio([note])
 }
 
-// --------------------------------------------------------------------
-// 📝 Handle Answer
-// --------------------------------------------------------------------
 function handleAnswer(answer: string) {
   selectedAnswer.value = answer
   isCorrect.value = answer === currentNote.value
@@ -89,7 +72,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -119,8 +101,6 @@ function handleNext() {
       </div>
 
       <template v-else>
-        <!-- Mode Selector -->
-
         <h4 class="mb-3 text-lg font-semibold">
           What note is this?
         </h4>
@@ -144,7 +124,6 @@ function handleNext() {
           </button>
         </div>
 
-        <!-- Options -->
         <div class="grid grid-cols-2 mb-4 gap-3">
           <button
             v-for="option in options"
@@ -162,12 +141,10 @@ function handleNext() {
           </button>
         </div>
 
-        <!-- Score -->
         <div class="mt-2 text-sm text-size-2xl text-gray-600 dark:text-gray-300">
           Score: {{ score.correct }} correct out of {{ score.total }}
         </div>
 
-        <!-- Next Button -->
         <div v-if="selectedAnswer" class="mt-3">
           <p class="text-sm">
             The correct answer was: <strong>{{ currentNote }}</strong>

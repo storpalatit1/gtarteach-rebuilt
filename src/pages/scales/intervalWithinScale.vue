@@ -20,11 +20,6 @@ const minorScaleIntervals = [
   { degree: 6, interval: 'Minor 6th', semitones: 8 },
   { degree: 7, interval: 'Minor 7th', semitones: 10 },
 ]
-// const questionTypes = [
-//     "Identifying an interval by number",
-//     "Identifying the note by an interval",
-//     "Identifying the interval within a scale"
-// ]
 
 const modes = [
   'major',
@@ -37,6 +32,7 @@ const chosenRoot = ref('')
 const chosenScale = ref([''])
 const chosenInterval = ref(1)
 const userInterval = ref('')
+const addition = ref('st')
 const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
 const goTo = ref(false)
@@ -61,6 +57,20 @@ function generateMinorScale(root) {
   }))
 }
 
+function additionToNumber() {
+  if (chosenInterval.value === 1) {
+    addition.value = 'st'
+  }
+  else if (chosenInterval.value === 2) {
+    addition.value = 'nd'
+  }
+  else if (chosenInterval.value === 3) {
+    addition.value = 'rd'
+  }
+  else if (chosenInterval.value === 4 || chosenInterval.value === 5 || chosenInterval.value === 6 || chosenInterval.value === 7) {
+    addition.value = 'th'
+  }
+}
 function generateQuestion() {
   isCorrect.value = null
   feedback.value = ''
@@ -70,6 +80,7 @@ function generateQuestion() {
   chosenMode.value = randomMode
   chosenRoot.value = randomRoot
   chosenInterval.value = randomInterval
+  additionToNumber()
   switch (chosenMode.value) {
     case 'major':
       chosenScale.value = generateMajorScale(chosenRoot.value)
@@ -82,6 +93,7 @@ function generateQuestion() {
 
   // console.log(chosenScale.value, chosenRoot.value, chosenMode.value, randomInterval, chosenScale.value[chosenInterval.value]);
 }
+
 function handleAnswer() {
   const answer = userInterval.value.trim()
   const correctNote = chosenScale.value[chosenInterval.value]?.note
@@ -103,7 +115,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -116,7 +127,7 @@ onMounted(() => {
   <main v-if="goTo === false" class="h-screen flex flex-col items-center justify-center text-center">
     <div class="max-w-lg w-full p-4">
       <h2 class="mb-4 text-xl">
-        What is the {{ chosenInterval }} interval of the {{ chosenRoot }} {{ chosenMode }} scale?
+        What is the {{ chosenInterval }}{{ addition }} next interval of the {{ chosenRoot }} {{ chosenMode }} scale? (Counting starts from the note after the root)
       </h2>
 
       <div class="mx-auto w-3/5 border-2 border-blue-400 rounded-lg p-2 dark:border-gray-200">

@@ -2,10 +2,8 @@
 import { onMounted, ref } from 'vue'
 import InteractiveFretboard from '../../components/FretboardInteractive.vue'
 
-// All notes in order
 const noteNames = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G']
 
-// Standard tuning (EADGBE)
 const stringTunings = ['E', 'A', 'D', 'G', 'B', 'E']
 
 const chosenNote = ref(null)
@@ -13,14 +11,12 @@ const selectedFrets = ref([])
 const isCorrect = ref(null)
 const score = ref({ correct: 0, total: 0 })
 const goTo = ref(false)
-// Pick random note
+
 function chooseRandomNote() {
   isCorrect.value = null
   chosenNote.value = noteNames[Math.floor(Math.random() * noteNames.length)]
-//   console.log('Chosen note:', chosenNote.value)
 }
 
-// Given a string index (0 = lowest E) and fret number, get note name
 function getNoteName(stringIndex, fret) {
   const openNote = stringTunings[stringIndex]
   const openIndex = noteNames.indexOf(openNote)
@@ -28,7 +24,6 @@ function getNoteName(stringIndex, fret) {
   return noteNames[noteIndex]
 }
 
-// Return all fret positions (string, fret) that match the chosen note
 function getAllNotePositions(note) {
   const positions = []
   for (let string = 0; string < stringTunings.length; string++) {
@@ -40,16 +35,14 @@ function getAllNotePositions(note) {
   }
   return positions
 }
-// helper: try to coerce incoming pos into canonical {string: 0..5, fret: 0..12}
+
 function normalizePos(raw) {
   let s = Number(raw.string)
   let f = Number(raw.fret)
 
-  // flip vertical orientation (fretboard uses 1=top, 6=bottom)
   if (s >= 1 && s <= 6)
-    s = 6 - s // now 0=low E, 5=high E
+    s = 6 - s
 
-  // normalize frets (UI 1..12 => 0..11)
   if (f >= 1)
     f = f - 1
 
@@ -57,7 +50,7 @@ function normalizePos(raw) {
 }
 
 function toKey(pos) {
-  return `${pos.string}-${pos.fret}` // canonical string
+  return `${pos.string}-${pos.fret}`
 }
 
 function checkAnswer() {
@@ -86,10 +79,8 @@ function goToNext() {
   selectedFrets.value = []
   chooseRandomNote()
   goTo.value = false
-  generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -105,7 +96,6 @@ onMounted(() => {
       Find all {{ chosenNote }}'s on the fretboard
     </h1>
 
-    <!-- Fretboard + control buttons group -->
     <div class="flex flex-col items-center gap-4">
       <InteractiveFretboard
         v-model="selectedFrets"
@@ -113,7 +103,6 @@ onMounted(() => {
         multiple
       />
 
-      <!-- BUTTONS stay close because they are inside this flex group -->
       <div class="space-x-4">
         <button
           class="rounded-md bg-blue-200 px-4 py-2 dark:border dark:border-gray-400 dark:bg-transparent"

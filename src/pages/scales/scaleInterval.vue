@@ -23,7 +23,6 @@ const modeAliases = {
   'locrian': ['locrian'],
 }
 
-// const selectedMode = ref('major')
 const correctMode = ref(modes[0])
 const correctModeDisplay = ref(majorScaleInterval)
 const selectedAnswer = ref(null)
@@ -93,7 +92,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }

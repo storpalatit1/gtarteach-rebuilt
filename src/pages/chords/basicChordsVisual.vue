@@ -15,7 +15,6 @@ const isCorrect = ref(null)
 const goTo = ref(false)
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5)
 
-// Generate a new question
 function generateQuestion() {
   isCorrect.value = null
   const correctChord = chords[Math.floor(Math.random() * chords.length)]
@@ -28,7 +27,6 @@ function generateQuestion() {
   selectedAnswer.value = null
 }
 
-// Handle user’s answer
 function handleAnswer(answer) {
   selectedAnswer.value = answer
   isCorrect.value = answer === currentChord.value.name
@@ -53,12 +51,10 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
 
-// Initialize on mount
 onMounted(() => {
   generateQuestion()
 })

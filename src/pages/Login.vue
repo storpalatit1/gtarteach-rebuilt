@@ -54,7 +54,6 @@ async function handleLogin() {
       Login
     </h1>
 
-    <!-- Centered bordered container -->
     <div class="mx-auto max-w-md w-full p-6 text-left space-y-4">
       <div class="text-black dark:text-white">
         Email:<br>
@@ -66,7 +65,7 @@ async function handleLogin() {
         <input v-model="password" type="password" class="w-full border rounded p-2" placeholder="password">
       </div>
 
-      <button class="w-full rounded bg-blue-500 p-2 text-white" @click="handleLogin">
+      <button class="w-full rounded bg-blue-500 p-2 text-white dark:bg-gray-200 dark:text-black" @click="handleLogin">
         Log in
       </button>
 

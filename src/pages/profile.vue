@@ -10,7 +10,6 @@ const xp = ref(null)
 const lvl = ref(null)
 
 function xpForLevel(level) {
-  // XP required to advance from lvl → lvl+1
   return 100 + (level - 1) * 150 + level * level * 20
 }
 
@@ -23,7 +22,7 @@ const xpProgress = computed(() => {
 
 watchEffect(async () => {
   if (!currentUser.value)
-    return // wait for user
+    return
 
   const { data: stats } = await supabase
     .from('stats')

@@ -3,9 +3,6 @@ import * as Tone from 'tone'
 import { onMounted, ref } from 'vue'
 import Progression from '~/components/Progression.vue'
 
-// --------------------------------------------------------------------
-// 🎹 Tone.js Sampler
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -19,29 +16,17 @@ const sampler = new Tone.Sampler({
 
 const isLoaded = ref(false)
 
-// --------------------------------------------------------------------
-// 🎸 Open-position guitar chords (realistic voicings)
-// --------------------------------------------------------------------
 const chords: Record<string, string[]> = {
-  // -------------------------
-  // Half-diminished (m7♭5)
-  // -------------------------
-  Bm7b5: ['B2', 'F#3', 'A3', 'D4'],
-  Em7b5: ['E2', 'Bb2', 'D3', 'G3'],
-  Am7b5: ['A2', 'Eb3', 'G3', 'C4'],
-  // -------------------------
-  // Fully diminished (dim7)
-  // -------------------------
-  Bdim7: ['B2', 'D3', 'F3', 'Ab3'],
 
-  Edim7: ['E2', 'G2', 'Bb2', 'Db3'],
-  Adim7: ['A2', 'C3', 'Eb3', 'Gb3'],
+  Bm7b5: ['B3', 'F4', 'A4', 'D5'],
+  Em7b5: ['E3', 'Bb3', 'D4', 'G4'],
+  Am7b5: ['A3', 'Eb4', 'G4', 'C5'],
 
+  Bdim7: ['B3', 'D4', 'F4', 'Ab4'],
+  Edim7: ['E3', 'G3', 'Bb3', 'Db4'],
+  Adim7: ['A3', 'C4', 'Eb4', 'Gb4'],
 }
 
-// --------------------------------------------------------------------
-// 🧠 State
-// --------------------------------------------------------------------
 const currentChord = ref<{ name: string, notes: string[] } | null>(null)
 const options = ref<string[]>([])
 const selectedAnswer = ref<string | null>(null)
@@ -99,7 +84,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- QUIZ SCREEN -->
   <main
     v-if="!goTo"
     class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center"
@@ -163,7 +147,6 @@ onMounted(async () => {
     </div>
   </main>
 
-  <!-- RESULT / PROGRESSION SCREEN -->
   <main v-else class="h-screen flex flex-col items-center justify-center text-center">
     <Progression
       difficulty="Intermediate"

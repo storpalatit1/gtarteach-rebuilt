@@ -2,9 +2,6 @@
 import * as Tone from 'tone'
 import { ref, watch } from 'vue'
 
-// --------------------------------------------------------------------
-// 🎵 Tone.js Sampler
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -23,9 +20,6 @@ Tone.loaded().then(() => {
   generateQuestion()
 })
 
-// --------------------------------------------------------------------
-// 🎵 Quiz State
-// --------------------------------------------------------------------
 const stringOpenNotes = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4']
 const strings = 6
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -43,9 +37,6 @@ const goTo = ref(false)
 const userNote = ref('')
 const correct = ref<boolean | null>(null)
 
-// --------------------------------------------------------------------
-// 🔊 Play Audio
-// --------------------------------------------------------------------
 async function playAudio(notes: string[]) {
   if (!isLoaded.value)
     return
@@ -59,9 +50,6 @@ async function playAudio(notes: string[]) {
   }
 }
 
-// --------------------------------------------------------------------
-// 🎵 Convert String + Fret → Note Name
-// --------------------------------------------------------------------
 function getNoteName(stringIndex: number, fretIndex: number): string {
   const openNote = stringOpenNotes[stringIndex - 1] // FIXED index
   const match = openNote.match(/([A-G]#?)(\d)/)
@@ -81,9 +69,6 @@ function getNoteName(stringIndex: number, fretIndex: number): string {
   return `${noteNames[semitone]}${octave}`
 }
 
-// --------------------------------------------------------------------
-// 🎯 Generate Question
-// --------------------------------------------------------------------
 function generateQuestion() {
   correct.value = null
 
@@ -99,9 +84,6 @@ function generateQuestion() {
   userNote.value = ''
 }
 
-// --------------------------------------------------------------------
-// 📝 Handle Answer
-// --------------------------------------------------------------------
 function handleAnswer() {
   selectedAnswer.value = userNote.value.trim()
 
@@ -119,7 +101,6 @@ function handleAnswer() {
   }
 }
 
-// Reset when fret range changes
 watch(startFret, () => {
   score.value.correct = 0
   score.value.total = 0
@@ -137,7 +118,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
@@ -183,7 +163,6 @@ function handleNext() {
           </button>
         </div>
 
-        <!-- Fret selection -->
         Fretboard note selection range:
         <div class="mx-auto w-1/2 border border-blue-400 rounded-lg py-2 dark:border-white">
           <input v-model.number="startFret" type="number" min="0" max="12" class="w-16 text-center">

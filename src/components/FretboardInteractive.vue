@@ -2,9 +2,6 @@
 import * as Tone from 'tone'
 import { ref, watch } from 'vue'
 
-// --------------------------------------------------------------------
-// Props & Types
-// --------------------------------------------------------------------
 interface Position {
   string: number
   fret: number
@@ -29,9 +26,6 @@ const emit = defineEmits(['update:modelValue'])
 const strings = 6
 const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 
-// --------------------------------------------------------------------
-// Tone.js Sampler
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -46,9 +40,6 @@ const sampler = new Tone.Sampler({
 const isLoaded = ref(false)
 Tone.loaded().then(() => (isLoaded.value = true))
 
-// --------------------------------------------------------------------
-// Note helpers
-// --------------------------------------------------------------------
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 const stringOpenNotes = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4']
 
@@ -70,9 +61,6 @@ function getNoteName(stringIndex: number, fretIndex: number): string {
   return `${noteNames[semitone]}${octave}`
 }
 
-// --------------------------------------------------------------------
-// State
-// --------------------------------------------------------------------
 const selectedNotes = ref<Position[]>([...props.modelValue])
 
 watch(
@@ -80,9 +68,6 @@ watch(
   v => (selectedNotes.value = [...v]),
 )
 
-// --------------------------------------------------------------------
-// Click handler
-// --------------------------------------------------------------------
 async function onNoteClick(stringIndex: number, fretIndex: number) {
   if (!isLoaded.value)
     return
@@ -103,9 +88,6 @@ async function onNoteClick(stringIndex: number, fretIndex: number) {
   emit('update:modelValue', [...selectedNotes.value])
 }
 
-// --------------------------------------------------------------------
-// Style: Note color
-// --------------------------------------------------------------------
 function getNoteColor(stringIndex: number, fretIndex: number) {
   const scale = props.positions?.some(
     n => n.string === stringIndex && n.fret === fretIndex,
@@ -131,7 +113,7 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
         :height="strings * 40 + 40"
         class="mx-auto block"
       >
-        <!-- STRING NAMES (inside SVG) -->
+
         <text
           v-for="(name, i) in stringNames"
           :key="`label-${i}`"
@@ -143,7 +125,6 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
           {{ name }}
         </text>
 
-        <!-- Fret numbers -->
         <text
           v-for="i in frets + 1"
           :key="`fret-${i}`"
@@ -155,7 +136,6 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
           {{ i - 1 }}
         </text>
 
-        <!-- Strings -->
         <line
           v-for="i in strings"
           :key="`string-${i}`"
@@ -167,7 +147,6 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
           :stroke-width="i === 1 || i === strings ? 3 : 2"
         />
 
-        <!-- Frets -->
         <line
           v-for="i in frets + 1"
           :key="`fret-line-${i}`"
@@ -179,7 +158,6 @@ function getNoteColor(stringIndex: number, fretIndex: number) {
           :stroke-width="i === 1 ? 4 : 2"
         />
 
-        <!-- Notes -->
         <g v-for="i in strings" :key="`g-${i}`">
           <circle
             v-for="f in frets"

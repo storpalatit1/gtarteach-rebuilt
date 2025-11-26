@@ -2,36 +2,29 @@
 import { computed, onMounted, ref } from 'vue'
 
 const chords: Record<string, string[]> = {
-  // C chords
+
   'C Major': ['C', 'E', 'G'],
   'C Minor': ['C', 'D#', 'G'], // or Eb
 
-  // D chords
   'D Major': ['D', 'F#', 'A'],
   'D Minor': ['D', 'F', 'A'],
 
-  // E chords
   'E Major': ['E', 'G#', 'B'],
   'E Minor': ['E', 'G', 'B'],
 
-  // F chords
   'F Major': ['F', 'A', 'C'],
   'F Minor': ['F', 'G#', 'C'], // or Ab
 
-  // G chords
   'G Major': ['G', 'B', 'D'],
   'G Minor': ['G', 'A#', 'D'], // or Bb
 
-  // A chords
   'A Major': ['A', 'C#', 'E'],
   'A Minor': ['A', 'C', 'E'],
 
-  // B chords
   'B Major': ['B', 'D#', 'F#'],
   'B Minor': ['B', 'D', 'F#'],
 }
 
-// reactive state
 const chord = ref('')
 const userNote1 = ref('')
 const userNote2 = ref('')
@@ -40,7 +33,6 @@ const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
 const isCorrect = ref<boolean | null>(null)
 
-// computed version of the correct notes
 const correctString = computed(() => {
   if (!chord.value)
     return ''
@@ -48,7 +40,7 @@ const correctString = computed(() => {
 })
 
 const goTo = ref(false)
-// generate new chord question
+
 function generateQuestion() {
   const chordNames = Object.keys(chords)
   chord.value = chordNames[Math.floor(Math.random() * chordNames.length)]
@@ -60,7 +52,6 @@ function generateQuestion() {
   isCorrect.value = null
 }
 
-// check user answer
 function handleAnswer() {
   const correctNotes = chords[chord.value].map(n => n.toUpperCase())
 
@@ -79,12 +70,10 @@ function handleAnswer() {
     = userSet.size === correctSet.size
       && [...userSet].every(note => correctSet.has(note))
 
-  // feedback message
   feedback.value = isCorrect.value
     ? '✅ Correct!'
     : `❌ Wrong! Correct notes: ${correctString.value}`
 
-  // score
   if (isCorrect.value)
     score.value.correct++
   score.value.total++
@@ -94,7 +83,6 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }

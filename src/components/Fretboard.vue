@@ -26,7 +26,6 @@ const strings = 6
 const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']
 const fretWidth = 60
 
-// compute visible frets from the provided range
 const visibleFrets = Array.from(
   { length: endFret - startFret + 1 },
   (_, i) => i + startFret,
@@ -57,7 +56,6 @@ const visibleFrets = Array.from(
           </div>
         </div> -->
 
-        <!-- Fretboard -->
         <div class="w-full flex justify-center">
           <svg
             :viewBox="`-40 0 ${(visibleFrets.length + 1) * fretWidth + 40} ${strings * 40}`"
@@ -67,7 +65,6 @@ const visibleFrets = Array.from(
             }"
           >
 
-            <!-- STRING NAMES (inside SVG) -->
             <text
               v-for="(name, i) in stringNames"
               :key="`label-${i}`"
@@ -78,7 +75,7 @@ const visibleFrets = Array.from(
             >
               {{ name }}
             </text>
-            <!-- Fret numbers -->
+
             <text
               v-for="fretIndex in visibleFrets"
               :key="`fret-${fretIndex}`"
@@ -92,7 +89,6 @@ const visibleFrets = Array.from(
               {{ fretIndex }}
             </text>
 
-            <!-- Strings (horizontal lines) -->
             <line
               v-for="stringIndex in strings"
               :key="`string-${stringIndex}`"
@@ -105,7 +101,6 @@ const visibleFrets = Array.from(
               class="text-foreground"
             />
 
-            <!-- Frets (vertical lines) -->
             <line
               v-for="(fretIndex, i) in visibleFrets"
               :key="`fret-line-${fretIndex}`"
@@ -118,7 +113,6 @@ const visibleFrets = Array.from(
               class="text-foreground"
             />
 
-            <!-- Finger positions -->
             <g
               v-for="(pos, index) in positions.filter(
                 p => p.fret >= startFret && p.fret <= endFret,
@@ -126,7 +120,7 @@ const visibleFrets = Array.from(
               :key="`pos-${index}`"
               :transform="`translate(${(pos.fret - startFret) * fretWidth + 18}, ${(pos.string - 1) * 40 + 28})`"
             >
-              <!-- Marker circle -->
+
               <circle
                 cx="12"
                 cy="12"
@@ -136,7 +130,6 @@ const visibleFrets = Array.from(
                   : 'fill-gray-200 stroke-gray-800 dark:fill-black dark:stroke-gray-100'"
               />
 
-              <!-- Note label -->
               <text
                 v-if="showNotes"
                 x="12"

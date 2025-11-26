@@ -51,23 +51,23 @@ async function logout() {
             <RouterLink
               icon-btn
               to="/Signup"
-              class="rounded-md px-3 py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
+              class="rounded-md py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
             >
-              Signup
+              Sign up
             </RouterLink>
 
             <RouterLink
               icon-btn
               to="/Login"
-              class="rounded-md px-3 py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
+              class="rounded-md py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
             >
-              Login
+              Log in
             </RouterLink>
           </template>
 
           <template v-else>
             <button
-              class="rounded-md px-3 py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
+              class="rounded-md py-1 transition hover:bg-gray-200 dark:hover:bg-gray-800"
               @click="logout"
             >
               Log Out

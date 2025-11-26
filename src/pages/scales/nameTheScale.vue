@@ -1,12 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 
-/* ------------------------------------------------------------------
-   Canonical chromatic for semitone math
------------------------------------------------------------------- */
 const canonicalChromatic = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-/* Enharmonics */
 const flatToSharp = {
   Bb: 'A#',
   Db: 'C#',
@@ -17,10 +13,8 @@ const flatToSharp = {
   Fb: 'E',
 }
 
-/* Keys that prefer flats */
 const flatKeys = ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb']
 
-/* Scale intervals mapped cleanly */
 const intervals = {
   major: [2, 2, 1, 2, 2, 2, 1],
   ionian: [2, 2, 1, 2, 2, 2, 1],
@@ -33,7 +27,6 @@ const intervals = {
   locrian: [1, 2, 2, 1, 2, 2, 2],
 }
 
-/* Modes for random quiz */
 const modes = [
   'major',
   'minor',
@@ -44,7 +37,6 @@ const modes = [
   'locrian',
 ]
 
-/* Normalize synonyms */
 function normalizeMode(mode) {
   mode = mode.toLowerCase()
   if (mode.includes('ionian') || mode === 'major')
@@ -54,10 +46,8 @@ function normalizeMode(mode) {
   return mode
 }
 
-/* Guitar open strings */
 const openStrings = ['E', 'B', 'G', 'D', 'A', 'E']
 
-/* Reactive state */
 const selectedRoot = ref('C')
 const selectedMode = ref('major')
 const selectedString = ref(null)
@@ -68,14 +58,13 @@ const feedback = ref('')
 const score = ref({ correct: 0, total: 0 })
 const goTo = ref(false)
 const isCorrect = ref(null)
-/* ------------------ Display Chromatic ------------------ */
+
 function getDisplayChromaticForKey(root) {
   return flatKeys.includes(root)
     ? ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
     : [...canonicalChromatic]
 }
 
-/* ------------------ Build Scale Notes ------------------ */
 function getScaleNotes(root, mode) {
   const m = normalizeMode(mode)
   const steps = intervals[m]
@@ -96,7 +85,6 @@ function getScaleNotes(root, mode) {
   return scale.slice(0, 7)
 }
 
-/* ------------------ Fretboard Mapping ------------------ */
 function getScalePositions(scaleNotesDisplay) {
   const positions = []
 
@@ -131,26 +119,12 @@ function getScalePositions(scaleNotesDisplay) {
   return positions
 }
 
-/* ------------------ Actions ------------------ */
 function chooseScale(root) {
   selectedRoot.value = root
   currentScaleNotes.value = getScaleNotes(root, selectedMode.value)
   scalePositions.value = getScalePositions(currentScaleNotes.value)
 }
 
-// function chooseMode(mode) {
-//   selectedMode.value = mode
-//   chooseScale(selectedRoot.value)
-// }
-
-// function chooseString(num) {
-//   selectedString.value = num
-//   if (currentScaleNotes.value.length) {
-//     scalePositions.value = getScalePositions(currentScaleNotes.value)
-//   }
-// }
-
-/* ------------------ Quiz Generator ------------------ */
 function generateQuestion() {
   isCorrect.value = null
   const mode = modes[Math.floor(Math.random() * modes.length)]
@@ -164,7 +138,6 @@ function generateQuestion() {
   feedback.value = ''
 }
 
-/* ------------------ Answer Check ------------------ */
 function handleAnswer() {
   const raw = userNotes.value.trim().toLowerCase()
   const [root, modeRaw] = raw.split(/\s+/)
@@ -189,11 +162,10 @@ function goToNext() {
   generateQuestion()
 }
 
-// Go to next question
 function handleNext() {
   goTo.value = true
 }
-/* Init */
+
 onMounted(() => {
   chooseScale('G')
   generateQuestion()

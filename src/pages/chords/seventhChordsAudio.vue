@@ -3,9 +3,6 @@ import * as Tone from 'tone'
 import { onMounted, ref } from 'vue'
 import Progression from '~/components/Progression.vue'
 
-// --------------------------------------------------------------------
-// 🎹 Tone.js Sampler
-// --------------------------------------------------------------------
 const sampler = new Tone.Sampler({
   urls: {
     'A2': 'A2.mp3',
@@ -19,37 +16,27 @@ const sampler = new Tone.Sampler({
 
 const isLoaded = ref(false)
 
-// --------------------------------------------------------------------
-// 🎸 Open-position guitar chords (realistic voicings)
-// --------------------------------------------------------------------
-// --------------------------------------------------------------------
 const chords: Record<string, string[]> = {
-  // --- Major 7th ---
-  Cmaj7: ['C3', 'E3', 'G3', 'B3', 'E4'], // x32000
-  Amaj7: ['A2', 'E3', 'G#3', 'C#4', 'E4'], // x02120
-  Dmaj7: ['D3', 'A3', 'C#4', 'F#4'], // xx0222
-  Emaj7: ['E2', 'B2', 'E3', 'G#3', 'D#4', 'E4'], // 021100 (corrected open voicing)
-  Gmaj7: ['G2', 'B2', 'D3', 'F#3', 'B3', 'G4'], // 320002
 
-  // --- Dominant 7th ---
-  C7: ['C3', 'E3', 'G3', 'Bb3', 'C4', 'E4'], // x32310 (corrected no high C5/E5)
-  A7: ['A2', 'E3', 'G3', 'C#4', 'E4'], // x02020
-  D7: ['D3', 'A3', 'C4', 'F#4'], // xx0212
-  E7: ['E2', 'B2', 'E3', 'G#3', 'D4', 'E4'], // 020100
-  G7: ['G2', 'B2', 'D3', 'F3', 'B3', 'G4'], // 320001
+  Cmaj7: ['C3', 'E3', 'G3', 'B3', 'E4'],
+  Amaj7: ['A2', 'E3', 'G#3', 'C#4', 'E4'],
+  Dmaj7: ['D3', 'A3', 'C#4', 'F#4'],
+  Emaj7: ['E2', 'B2', 'E3', 'G#3', 'D#4', 'E4'],
+  Gmaj7: ['G2', 'B2', 'D3', 'F#3', 'B3', 'G4'],
 
-  // --- Minor 7th ---
-  Am7: ['A2', 'E3', 'G3', 'C4', 'E4'], // x02010
-  Dm7: ['D3', 'A3', 'C4', 'F4'], // xx0211
-  Em7: ['E2', 'B2', 'D3', 'G3', 'B3', 'E4'], // 020000
+  C7: ['C3', 'E3', 'G3', 'Bb3', 'C4', 'E4'],
+  A7: ['A2', 'E3', 'G3', 'C#4', 'E4'],
+  D7: ['D3', 'A3', 'C4', 'F#4'],
+  E7: ['E2', 'B2', 'E3', 'G#3', 'D4', 'E4'],
+  G7: ['G2', 'B2', 'D3', 'F3', 'B3', 'G4'],
 
-  // Real open-position-compatible Gm7 (your version was impossible)
-  Gm7: ['G2', 'D3', 'F3', 'Bb3', 'D4', 'G4'], // 353333 → notes only
+  Am7: ['A2', 'E3', 'G3', 'C4', 'E4'],
+  Dm7: ['D3', 'A3', 'C4', 'F4'],
+  Em7: ['E2', 'B2', 'D3', 'G3', 'B3', 'E4'],
+
+  Gm7: ['G2', 'D3', 'F3', 'Bb3', 'D4', 'G4'],
 }
 
-// --------------------------------------------------------------------
-// 🧠 State
-// --------------------------------------------------------------------
 const currentChord = ref<{ name: string, notes: string[] } | null>(null)
 const options = ref<string[]>([])
 const selectedAnswer = ref<string | null>(null)
@@ -107,7 +94,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- QUIZ SCREEN -->
   <main
     v-if="!goTo"
     class="mx-auto h-screen max-w-3xl flex flex-col items-center justify-center text-center"
@@ -171,7 +157,6 @@ onMounted(async () => {
     </div>
   </main>
 
-  <!-- RESULT / PROGRESSION SCREEN -->
   <main v-else class="h-screen flex flex-col items-center justify-center text-center">
     <Progression
       difficulty="Intermediate"
